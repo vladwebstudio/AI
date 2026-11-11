@@ -26,7 +26,7 @@
   --bg:#E9EBE8; --surface:#F6F7F5; --ink:#121417; --muted:#585D65; --line:#C9CEC8;
   --accent:#D93F22; --accent-text:#BF3518; --on-accent:#fff;
   --shot-edge:rgba(18,20,23,.9);
-  --shot-shadow:0 40px 70px -34px rgba(18,20,23,.55);
+  --shot-shadow:0 22px 38px -22px rgba(18,20,23,.5);
   --glass-hi:rgba(255,255,255,.55); --glass-lo:rgba(18,20,23,.22);
   --wrap:1180px; --pad:28px; --hd:64px;
 }
@@ -34,7 +34,7 @@
   --bg:#0E0F11; --surface:#17181B; --ink:#ECEDEA; --muted:#9A9FA6; --line:#2C2E33;
   --accent:#FF6A4D; --accent-text:#FF7D63; --on-accent:#0E0F11;
   --shot-edge:rgba(236,237,234,.16);
-  --shot-shadow:0 40px 80px -30px rgba(0,0,0,.9);
+  --shot-shadow:0 22px 40px -20px rgba(0,0,0,.85);
   --glass-hi:rgba(255,255,255,.34); --glass-lo:rgba(0,0,0,.4);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -52,7 +52,7 @@ html[data-lang=uk] [lang=ru],html[data-lang=ru] [lang=uk]{display:none}
 .nb{white-space:nowrap}
 
 /* header */
-.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:background-color .35s,border-color .35s}
+.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 95%,transparent);border-bottom:1px solid var(--line);transition:background-color .35s,border-color .35s}
 .bar{display:flex;align-items:center;gap:26px;height:var(--hd)}
 .brand{display:flex;align-items:baseline;gap:12px;text-decoration:none}
 .brand-w{font-family:var(--f-display);font-weight:700;font-variation-settings:"SHRP" 100,"CRSV" 1;font-style:oblique 10deg;font-size:27px;letter-spacing:-.05em;line-height:1}
@@ -150,8 +150,6 @@ html[data-lang=ru] .hero h1{font-size:clamp(36px,min(4.5vw,8.6vh),74px)}
 .vs-row>div{grid-row:var(--r);display:flex;align-items:center}
 .vs-old{grid-column:1;padding:28px 44px 28px 0;color:var(--muted);font-size:17px;border-top:1px solid var(--line)}
 .vs-new{grid-column:2;position:relative;padding:28px 40px 28px 86px;color:var(--bg);font:500 clamp(19px,1.95vw,26px)/1.22 var(--f-display);font-variation-settings:"SHRP" 100;letter-spacing:-.018em;border-top:1px solid color-mix(in srgb,var(--bg) 16%,transparent);transition:color .35s}
-.vs-new>span{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-.vs-row:hover .vs-new>span{transform:translateX(7px)}
 .vs-new::before{content:"";position:absolute;left:42px;top:50%;width:19px;height:10px;margin-top:-9px;border-left:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);transform:rotate(-45deg)}
 .vs-head>div{font:500 13.5px var(--f-body);font-variation-settings:normal;letter-spacing:0;padding-block:0 16px;border-top:0;color:var(--muted)}
 .vs-head .vs-new::before{display:none}
@@ -160,8 +158,8 @@ html[data-lang=ru] .hero h1{font-size:clamp(36px,min(4.5vw,8.6vh),74px)}
 .sk{background:linear-gradient(var(--muted),var(--muted)) 0 58%/100% 1px no-repeat}
 .js .vs .sk{background-size:0 1px;transition:background-size .8s cubic-bezier(.3,.7,.2,1) calc(var(--i)*.16s + .25s)}
 .js .vs.in .sk{background-size:100% 1px}
-.js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:0;filter:blur(9px)}
-.js .vs.in .vs-row:not(.vs-head) .vs-new>span{opacity:1;filter:blur(0);transition:opacity .8s calc(var(--i)*.16s + .55s),filter .8s calc(var(--i)*.16s + .55s),transform .45s cubic-bezier(.2,.8,.2,1)}
+.js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:0;transform:translateY(8px)}
+.js .vs.in .vs-row:not(.vs-head) .vs-new>span{opacity:1;transform:none;transition:opacity .6s calc(var(--i)*.14s + .45s),transform .6s calc(var(--i)*.14s + .45s) cubic-bezier(.2,.8,.2,1)}
 .js .vs .vs-new::before{opacity:0;transition:opacity .4s calc(var(--i)*.16s + .75s)}
 .js .vs.in .vs-new::before{opacity:1}
 
@@ -340,7 +338,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .js .hero-copy>*,.js .stage,.js .tl{animation:none}
   .js [data-rv]{opacity:1;transform:none;transition:none}
   .js .vs .sk{background-size:100% 1px;transition:none}
-  .js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:1;filter:none;transition:none}
+  .js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:1;transform:none;transition:none}
   .js .vs .vs-new::before{opacity:1}
   .steps::after{transition:none}
   .btn-go::after{animation:none}
