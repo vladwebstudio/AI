@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="uk" data-lang="uk" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>чую — ШІ-аналіз дзвінків для відділів продажів</title>
+<meta name="description" content="ШІ розбирає записи дзвінків і Zoom-зустрічей за вашим скриптом і показує, де менеджер втратив клієнта: помилка, цитата, таймкод.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="чую — кожна розмова менеджера під лупою">
+<meta property="og:description" content="ШІ розбирає дзвінки й Zoom-зустрічі за вашим скриптом: помилка, цитата, таймкод. Безкоштовний тест на 3 розмовах.">
+<meta property="og:image" content="https://vladwebstudio.github.io/ai-calls/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://vladwebstudio.github.io/ai-calls/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght,SHRP@500..700,100&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geologica:slnt,wght,CRSV,SHRP@-10,700,1,100&text=%D1%87%D1%83%D1%8E.&display=swap" rel="stylesheet">
+<link rel="preload" as="image" type="image/webp" href="img/hero-weak.webp" imagesrcset="img/hero-weak-900.webp 900w, img/hero-weak.webp 1543w" imagesizes="(max-width:940px) 100vw, 1100px" fetchpriority="high">
+<style>
+:root{
+  --f-display:'Geologica','Onest',system-ui,sans-serif;
+  --f-body:'Onest',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,monospace;
+  --bg:#E9EBE8; --surface:#F6F7F5; --ink:#121417; --muted:#585D65; --line:#C9CEC8;
+  --accent:#D93F22; --accent-text:#BF3518; --on-accent:#fff;
+  --shot-edge:rgba(18,20,23,.9);
+  --shot-shadow:0 40px 70px -34px rgba(18,20,23,.55);
+  --glass-hi:rgba(255,255,255,.55); --glass-lo:rgba(18,20,23,.22);
+  --wrap:1180px; --pad:28px; --hd:64px;
+}
+[data-theme=dark]{
+  --bg:#0E0F11; --surface:#17181B; --ink:#ECEDEA; --muted:#9A9FA6; --line:#2C2E33;
+  --accent:#FF6A4D; --accent-text:#FF7D63; --on-accent:#0E0F11;
+  --shot-edge:rgba(236,237,234,.16);
+  --shot-shadow:0 40px 80px -30px rgba(0,0,0,.9);
+  --glass-hi:rgba(255,255,255,.34); --glass-lo:rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hd) + 16px)}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;transition:background-color .35s,color .35s;overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+h1,h2,h3{font-family:var(--f-display);font-weight:560;font-variation-settings:"SHRP" 100;letter-spacing:-.028em;line-height:1.04;text-wrap:balance}
+p{text-wrap:pretty}
+html[data-lang=uk] [lang=ru],html[data-lang=ru] [lang=uk]{display:none}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--pad)}
+.tc{font-family:var(--f-mono);font-weight:500;font-size:.86em;letter-spacing:0;color:var(--accent-text);font-variant-numeric:tabular-nums}
+.nb{white-space:nowrap}
+
+/* header */
+.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);transition:background-color .35s,border-color .35s}
+.bar{display:flex;align-items:center;gap:26px;height:var(--hd)}
+.brand{display:flex;align-items:baseline;gap:12px;text-decoration:none}
+.brand-w{font-family:var(--f-display);font-weight:700;font-variation-settings:"SHRP" 100,"CRSV" 1;font-style:oblique 10deg;font-size:27px;letter-spacing:-.05em;line-height:1}
+.brand-w::after{content:".";color:var(--accent)}
+.brand-t{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.top nav{display:flex;gap:24px;margin-left:auto}
+.top nav a{font-size:14.5px;text-decoration:none;color:var(--muted);transition:color .2s}
+.top nav a:hover{color:var(--ink)}
+.ctl{display:flex;align-items:center;gap:14px}
+.lang{display:flex;gap:2px}
+.lang button{background:none;border:0;cursor:pointer;font:500 12.5px var(--f-mono);color:var(--muted);padding:6px 5px;border-bottom:1.5px solid transparent}
+.lang button[aria-pressed=true]{color:var(--ink);border-color:var(--accent)}
+.theme{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);background:linear-gradient(90deg,var(--ink) 50%,transparent 50%);cursor:pointer;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+[data-theme=dark] .theme{transform:rotate(180deg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;font:600 15.5px var(--f-body);background:var(--ink);color:var(--bg);padding:15px 24px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;transition:transform .25s cubic-bezier(.2,.8,.2,1),background-color .35s,color .35s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+.btn-sm{padding:10px 17px;font-size:14px}
+.btn-line{background:none;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-accent{background:var(--accent);color:var(--on-accent)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;--tx:0deg;--ty:0deg}
+.hero-in{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);grid-template-rows:1fr auto;column-gap:52px;align-items:center;min-height:min(calc(100svh - var(--hd)),860px);padding-block:26px 18px}
+.hero h1{font-size:clamp(38px,min(4.9vw,9.3vh),80px)}
+html[data-lang=ru] .hero h1{font-size:clamp(36px,min(4.5vw,8.6vh),74px)}
+.lead{font-size:clamp(16.5px,1.32vw,19.5px);color:var(--muted);max-width:33em;margin-top:clamp(16px,2.6vh,28px)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:clamp(18px,3.2vh,34px)}
+.fine{font-size:14px;color:var(--muted);max-width:36em;margin-top:clamp(12px,2vh,20px);padding-left:14px;border-left:2px solid var(--accent)}
+.stage{position:relative;perspective:1500px}
+.rig{position:relative;width:min(100%,calc((100svh - var(--hd) - 232px)*1.42));min-width:min(100%,380px);aspect-ratio:1543/1084;margin-inline:auto;transform-style:preserve-3d;transform:rotateX(calc(8deg + var(--ty))) rotateY(calc(-15deg + var(--tx))) rotateZ(.8deg)}
+.sheet{position:absolute;inset:0;border-radius:1.9%/2.7%;overflow:hidden;background:#0e1120;box-shadow:0 0 0 1px var(--shot-edge),var(--shot-shadow)}
+.sheet img{width:100%;height:100%;object-fit:cover}
+.sheet-front{transform:translateZ(34px)}
+.hp{position:absolute;width:0;height:0}
+.status{position:relative;min-height:3.1em;margin:22px auto 0;width:min(100%,calc((100svh - var(--hd) - 232px)*1.42));min-width:min(100%,380px);font-size:14.5px;color:var(--muted)}
+.status>span{display:none}
+.hero[data-st="0"] .st-0,.hero[data-st="a"] .st-a,.hero[data-st="b"] .st-b{display:block;animation:stIn .4s both}
+.status b{font-weight:500;margin-right:8px}
+.status .st-a,.status .st-b{color:var(--ink)}
+@keyframes stIn{from{opacity:0;transform:translateY(5px)}}
+/* call timeline */
+.tl{grid-column:1/-1;position:relative;height:38px;margin-top:8px;border-bottom:1px solid var(--line)}
+.tl::before{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/calc(100%/22) 100%}
+.tl span{position:absolute;bottom:11px;font:400 11px var(--f-mono);color:var(--muted);transform:translateX(-1px)}
+.tl .pin{bottom:0;top:auto;height:24px;width:1.5px;background:var(--accent);transform:none;transition:height .35s cubic-bezier(.2,.8,.2,1)}
+.tl .pin::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:500 11px var(--f-mono);color:var(--accent-text);padding-bottom:2px;white-space:nowrap}
+.tl .pin::before{content:"";position:absolute;bottom:-3.5px;left:-3px;width:7.5px;height:7.5px;border-radius:50%;background:var(--accent);transition:transform .35s}
+.tl .pin-a::after{transform:translateX(-78%)}
+.tl .pin-b::after{transform:translateX(-22%)}
+.hero[data-st="a"] .pin-a,.hero[data-st="b"] .pin-b{height:32px}
+.hero[data-st="a"] .pin-a::before,.hero[data-st="b"] .pin-b::before{transform:scale(1.7)}
+/* lens */
+.mag{--d:204px;position:absolute;left:0;top:0;width:var(--d);height:var(--d);z-index:6;pointer-events:none;opacity:0;will-change:transform;transform-style:preserve-3d}
+.mag.on{opacity:1;transition:opacity .5s}
+.mag-view{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:var(--bg);transition:background-color .35s}
+.mag-clone{position:absolute;left:0;top:0;width:0;height:0}
+.is-clone{position:absolute;left:0;top:0;margin:0;max-width:none;min-height:0;transform-origin:0 0}
+.is-clone,.is-clone *{animation:none!important}
+.is-clone .sheet{inset:auto;left:0;top:0;width:200%;height:200%;transform-origin:0 0}
+.is-clone .sheet-front{transform:translateZ(34px) scale(.5)}
+.mag-ring{position:absolute;inset:0;border-radius:50%;border:6px solid var(--ink);box-shadow:0 34px 44px -18px rgba(0,0,0,.5),0 0 0 1px var(--glass-lo),inset 0 0 0 1.5px var(--accent),inset 0 14px 26px -8px var(--glass-hi),inset 0 -18px 30px -12px var(--glass-lo);transition:border-color .35s}
+.mag-ring::after{content:"";position:absolute;left:13%;top:9%;width:44%;height:26%;border-radius:50%;background:radial-gradient(closest-side,var(--glass-hi),transparent);transform:rotate(-28deg);opacity:.75}
+.mag-handle{position:absolute;left:50%;top:50%;width:15px;height:calc(var(--d)*.46);margin-left:-7.5px;border-radius:0 0 9px 9px;background:var(--ink);transform-origin:50% 0;transform:rotate(-42deg) translateY(calc(var(--d)/2 - 2px));box-shadow:0 26px 30px -10px rgba(0,0,0,.45);transition:background-color .35s}
+.mag-handle::before{content:"";position:absolute;left:0;right:0;top:9px;height:5px;background:var(--accent)}
+.stage.manual{cursor:none}
+/* load sequence */
+.js .hero-copy>*{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.js .hero-copy>:nth-child(2){animation-delay:.08s}
+.js .hero-copy>:nth-child(3){animation-delay:.16s}
+.js .hero-copy>:nth-child(4){animation-delay:.24s}
+.js .stage{animation:fly 1.3s cubic-bezier(.16,.84,.24,1) .1s both}
+.js .tl{animation:rise .9s cubic-bezier(.2,.8,.2,1) .4s both}
+@keyframes rise{from{opacity:0;transform:translateY(26px)}}
+@keyframes fly{from{opacity:0;transform:translate3d(60px,30px,0) scale(.94)}}
+
+/* sections */
+.sec{padding-block:clamp(72px,10vw,128px)}
+.sec-tint{background:var(--surface);border-block:1px solid var(--line);transition:background-color .35s,border-color .35s}
+.sec h2{font-size:clamp(31px,4.4vw,60px);max-width:17em}
+.sec-intro{color:var(--muted);font-size:clamp(17px,1.4vw,19.5px);max-width:35em;margin-top:20px}
+.sec-head{margin-bottom:clamp(36px,5vw,64px)}
+.js [data-rv]{opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+.js [data-rv].in{opacity:1;transform:none}
+
+/* contrast */
+.vs{position:relative;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1fr);isolation:isolate;margin-block:26px}
+.vs::before{content:"";grid-column:2;grid-row:1/span 5;z-index:-1;margin-block:-26px;border-radius:24px;background:var(--ink);box-shadow:var(--shot-shadow);transition:background-color .35s}
+.vs-row{display:contents}
+.vs-row:nth-child(1){--r:1;--i:0}.vs-row:nth-child(2){--r:2;--i:0}.vs-row:nth-child(3){--r:3;--i:1}.vs-row:nth-child(4){--r:4;--i:2}.vs-row:nth-child(5){--r:5;--i:3}
+.vs-row>div{grid-row:var(--r);display:flex;align-items:center}
+.vs-old{grid-column:1;padding:28px 44px 28px 0;color:var(--muted);font-size:17px;border-top:1px solid var(--line)}
+.vs-new{grid-column:2;position:relative;padding:28px 40px 28px 86px;color:var(--bg);font:500 clamp(19px,1.95vw,26px)/1.22 var(--f-display);font-variation-settings:"SHRP" 100;letter-spacing:-.018em;border-top:1px solid color-mix(in srgb,var(--bg) 16%,transparent);transition:color .35s}
+.vs-new>span{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.vs-row:hover .vs-new>span{transform:translateX(7px)}
+.vs-new::before{content:"";position:absolute;left:42px;top:50%;width:19px;height:10px;margin-top:-9px;border-left:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);transform:rotate(-45deg)}
+.vs-head>div{font:500 13.5px var(--f-body);font-variation-settings:normal;letter-spacing:0;padding-block:0 16px;border-top:0;color:var(--muted)}
+.vs-head .vs-new::before{display:none}
+.vs-head>div:last-child{grid-column:2;padding:4px 40px 16px 42px;color:color-mix(in srgb,var(--bg) 62%,transparent)}
+.vs-head>div:first-child{grid-column:1;align-items:flex-end}
+.sk{background:linear-gradient(var(--muted),var(--muted)) 0 58%/100% 1px no-repeat}
+.js .vs .sk{background-size:0 1px;transition:background-size .8s cubic-bezier(.3,.7,.2,1) calc(var(--i)*.16s + .25s)}
+.js .vs.in .sk{background-size:100% 1px}
+.js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:0;filter:blur(9px)}
+.js .vs.in .vs-row:not(.vs-head) .vs-new>span{opacity:1;filter:blur(0);transition:opacity .8s calc(var(--i)*.16s + .55s),filter .8s calc(var(--i)*.16s + .55s),transform .45s cubic-bezier(.2,.8,.2,1)}
+.js .vs .vs-new::before{opacity:0;transition:opacity .4s calc(var(--i)*.16s + .75s)}
+.js .vs.in .vs-new::before{opacity:1}
+
+/* call viewer */
+.vt{position:relative;display:flex;gap:clamp(20px,3vw,40px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.vt::-webkit-scrollbar{display:none}
+.vt button{background:none;border:0;cursor:pointer;font:500 clamp(17px,1.7vw,22px) var(--f-display);letter-spacing:-.015em;color:var(--muted);padding:16px 0;white-space:nowrap;transition:color .25s}
+.vt button:hover,.vt button[aria-selected=true]{color:var(--ink)}
+.vt .ind{position:absolute;left:0;bottom:0;height:2px;width:40px;background:var(--accent);transition:transform .45s cubic-bezier(.2,.8,.2,1),width .45s cubic-bezier(.2,.8,.2,1)}
+.vqa-box{display:grid;margin-block:30px 34px}
+.vqa{grid-area:1/1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 56px;align-items:start;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .4s,transform .4s,visibility 0s .4s}
+.vqa.on{opacity:1;visibility:visible;transform:none;transition:opacity .45s .08s,transform .45s .08s}
+.vqa h3{font-size:clamp(22px,2.5vw,33px);line-height:1.12}
+.vqa p{color:var(--muted)}
+.shot{border-radius:12px;overflow:hidden;background:#0e1120;box-shadow:0 0 0 1px var(--shot-edge),var(--shot-shadow)}
+.card-shot{position:relative;aspect-ratio:2144/935}
+.card-shot img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .5s}
+.card-shot img.on{opacity:1}
+.swipe{display:none;font-size:13.5px;color:var(--muted);margin-top:12px}
+
+.ask{display:flex;align-items:center;justify-content:space-between;gap:20px 32px;flex-wrap:wrap;margin-top:clamp(36px,5vw,60px);padding-top:30px;border-top:1px solid var(--line)}
+.ask p{font:500 clamp(21px,2.3vw,30px)/1.15 var(--f-display);font-variation-settings:"SHRP" 100;letter-spacing:-.022em}
+
+/* calculator */
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px 72px;align-items:center}
+.calc-in{display:grid;gap:34px}
+.lab{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:12px}
+.lab label{font-size:16px;color:var(--muted)}
+.lab output{font:500 24px/1 var(--f-display);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:30px;background:none;cursor:pointer;--p:50%}
+input[type=range]::-webkit-slider-runnable-track{height:2px;background:linear-gradient(90deg,var(--accent) var(--p),var(--line) var(--p))}
+input[type=range]::-moz-range-track{height:2px;background:linear-gradient(90deg,var(--accent) var(--p),var(--line) var(--p))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-11px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);transition:transform .2s}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--bg);border:2px solid var(--ink)}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.18)}
+input[type=number]{-moz-appearance:textfield;appearance:textfield;display:block;width:100%;font:500 26px/1.2 var(--f-display);font-variant-numeric:tabular-nums;color:var(--ink);background:none;border:0;border-bottom:1.5px solid var(--ink);border-radius:0;padding:4px 0 8px}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]:focus{outline:0;border-color:var(--accent)}
+.cur{display:flex;gap:4px}
+.cur button{width:32px;height:32px;border-radius:50%;border:1.5px solid transparent;background:none;cursor:pointer;font:500 15px var(--f-body);color:var(--muted)}
+.cur button[aria-pressed=true]{border-color:var(--ink);color:var(--ink)}
+.calc-out{background:var(--ink);color:var(--bg);border-radius:24px;padding:clamp(28px,4vw,52px);box-shadow:var(--shot-shadow);transition:background-color .35s,color .35s}
+.calc-out .big{font:560 clamp(38px,5.2vw,72px)/1 var(--f-display);font-variation-settings:"SHRP" 100;letter-spacing:-.035em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc-out .big.long{font-size:clamp(30px,3.6vw,50px)}
+.calc-out .cap{opacity:.6;font-size:15.5px;margin-top:10px}
+.calc-out .yr{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:30px;padding-top:22px;border-top:1px solid color-mix(in srgb,var(--bg) 16%,transparent)}
+.calc-out .yr span{opacity:.6;font-size:15.5px}
+.calc-out .yr b{font:500 clamp(21px,2.4vw,30px) var(--f-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px 72px;align-items:center}
+.about-me{display:flex;gap:28px;align-items:flex-start}
+.about-me .me{flex:none;width:112px;height:112px;border-radius:50%;object-fit:cover}
+.about h2{font-size:clamp(28px,3.4vw,46px)}
+.about-me p{color:var(--muted);font-size:clamp(17px,1.4vw,19px);max-width:31em;margin:18px 0 26px}
+.facts{list-style:none;border-top:1.5px solid var(--ink)}
+.facts li{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line)}
+.facts b{font:560 clamp(34px,3.6vw,48px)/1 var(--f-display);font-variation-settings:"SHRP" 100;letter-spacing:-.03em}
+.facts span{color:var(--muted);font-size:16px}
+
+/* terms */
+.terms{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px 30px;margin-top:clamp(40px,5vw,64px)}
+.terms li{position:relative;padding-left:34px;font:500 17px/1.3 var(--f-display);letter-spacing:-.01em}
+.terms li::before{content:"";position:absolute;left:2px;top:.22em;width:16px;height:8px;border-left:2.5px solid var(--accent);border-bottom:2.5px solid var(--accent);transform:rotate(-45deg)}
+.dock{display:none}
+
+/* team */
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:38px}
+.notes h3{font-size:20px;letter-spacing:-.015em;padding-top:16px;border-top:1.5px solid var(--ink);margin-bottom:8px}
+.notes p{color:var(--muted);font-size:16px}
+.more{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:clamp(48px,6vw,80px)}
+.more button{display:block;width:100%;background:none;border:0;padding:0;text-align:left;cursor:zoom-in}
+.more .shot{border-radius:9px;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.more button:hover .shot{transform:translateY(-6px)}
+.more img{width:100%;aspect-ratio:1440/690;object-fit:cover}
+.more h3{font-size:19px;letter-spacing:-.015em;margin:18px 0 6px}
+.more p{color:var(--muted);font-size:15.5px}
+dialog{border:0;padding:0;background:none;max-width:min(94vw,1440px);margin:auto}
+dialog::backdrop{background:rgba(8,9,11,.82)}
+dialog img{width:100%;border-radius:10px;cursor:zoom-out}
+.team-shot+.swipe{margin-bottom:-14px}
+
+/* start */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0 30px;position:relative;list-style:none;counter-reset:s}
+.steps::before,.steps::after{content:"";position:absolute;left:0;right:0;top:21px;height:1px;background:var(--line)}
+.steps::after{background:var(--accent);transform-origin:0 50%;transform:scaleX(0);transition:transform 1.8s cubic-bezier(.3,.7,.2,1) .2s}
+.steps.in::after{transform:scaleX(1)}
+.steps li{position:relative;z-index:1;counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:43px;height:43px;border-radius:50%;background:var(--bg);border:1.5px solid var(--ink);font:500 16px var(--f-mono);margin-bottom:22px;transition:background-color .35s}
+.sec-tint .steps li::before{background:var(--surface)}
+.steps h3{font-size:21px;letter-spacing:-.015em;margin-bottom:9px}
+.steps p{color:var(--muted);font-size:15.5px}
+.fit{display:grid;grid-template-columns:1fr 1fr;gap:28px 56px;margin-top:clamp(32px,4vw,48px);padding-top:28px;border-top:1px solid var(--line)}
+.fit h3{font-size:18px;letter-spacing:-.01em;margin-bottom:8px}
+.fit p{color:var(--muted);font-size:16px;max-width:30em}
+
+/* faq */
+.faq{max-width:860px}
+details{border-top:1px solid var(--line)}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;font:500 clamp(18px,1.8vw,22px) var(--f-display);letter-spacing:-.015em;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:22px 0}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"";flex:none;width:13px;height:13px;border-right:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink);transform:rotate(45deg) translate(-3px,-3px);transition:transform .35s}
+details[open] summary::after{transform:rotate(225deg) translate(-3px,-3px)}
+details p{color:var(--muted);max-width:42em;padding-bottom:24px}
+
+/* final */
+.final{background:var(--ink);color:var(--bg);padding-block:clamp(84px,11vw,140px);transition:background-color .35s,color .35s}
+[data-theme=dark] .final{background:var(--surface);color:var(--ink);border-top:1px solid var(--line)}
+.final h2{font-size:clamp(34px,5.4vw,76px);max-width:13.5em}
+.final p{margin:24px 0 38px;font-size:19px;opacity:.72;max-width:30em}
+footer{padding-block:28px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media(max-width:940px){
+  .top nav,.bar .btn-sm{display:none}
+  .ctl{margin-left:auto}
+  .hero-in{grid-template-columns:1fr;min-height:0;row-gap:8px;padding-block:44px 22px}
+  .hero h1,html[data-lang=ru] .hero h1{font-size:clamp(38px,9.6vw,64px)}
+  .stage{margin-top:30px}
+  .rig,.status{width:92%}
+  .mag{--d:132px}
+  .mag-ring{border-width:4.5px}
+  .mag-handle{width:11px;margin-left:-5.5px}
+  .vqa{grid-template-columns:1fr}
+  .lang button{padding:12px 9px;font-size:13.5px}
+  .theme{width:36px;height:36px}
+  .brand-t{display:none}
+  .card-shot,.team-shot{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none}
+  .card-shot::-webkit-scrollbar,.team-shot::-webkit-scrollbar{display:none}
+  .card-shot{aspect-ratio:auto;height:clamp(380px,64svh,540px)}
+  .team-shot img{height:380px;width:auto;max-width:none}
+  .lbw{overflow-x:auto;border-radius:10px}
+  dialog{max-width:100vw;width:100vw}
+  dialog img{height:min(70svh,560px);width:auto;max-width:none;border-radius:0}
+  .facts li{grid-template-columns:118px 1fr;gap:14px}
+  .card-shot img{position:static;display:none;height:100%;width:auto;max-width:none}
+  .card-shot img.on{display:block}
+  .swipe{display:block}
+  .notes,.more{grid-template-columns:1fr;gap:26px}
+  .steps{grid-template-columns:1fr;gap:26px}
+  .steps::before,.steps::after{left:21px;right:auto;top:0;bottom:0;width:1px;height:auto}
+  .steps::after{transform-origin:50% 0;transform:scaleY(0)}
+  .steps.in::after{transform:scaleY(1)}
+  .steps li{display:grid;grid-template-columns:43px 1fr;column-gap:18px}
+  .steps li::before{grid-row:1/3;margin:0}
+  .fit{grid-template-columns:1fr}
+  .calc,.about,.terms{grid-template-columns:1fr}
+  .about-me{flex-direction:column;gap:20px}
+  .ask .btn{width:100%}
+  .dock{display:block;position:fixed;left:12px;right:12px;bottom:12px;z-index:25;transform:translateY(160%);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .dock.on{transform:none}
+  .dock .btn{width:100%;box-shadow:0 16px 34px -10px rgba(0,0,0,.55)}
+  footer{padding-bottom:92px}
+}
+@media(max-width:640px){
+  :root{--pad:20px}
+  .vs{display:block;margin-block:0}
+  .vs::before{display:none}
+  .vs-row{display:block}
+  .vs-head{display:none}
+  .vs-old{padding:22px 0 10px;border-top:0;font-size:15.5px}
+  .vs-new{padding:18px 20px 18px 56px;border-top:0;border-radius:16px;background:var(--ink);font-size:18.5px}
+  .vs-new::before{left:20px}
+  .cta .btn{width:100%}
+  .btn{padding:16px 20px}
+  .sec h2{font-size:clamp(29px,8.4vw,40px)}
+  .final h2{font-size:clamp(32px,9.4vw,46px)}
+  .calc-out .big{font-size:clamp(34px,11vw,52px)}
+  .calc-out .big.long{font-size:clamp(26px,8vw,38px)}
+  .tl span:nth-child(2),.tl span:nth-child(4){display:none}
+}
+@media(hover:none){.hov{display:none}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .hero-copy>*,.js .stage,.js .tl{animation:none}
+  .js [data-rv]{opacity:1;transform:none;transition:none}
+  .js .vs .sk{background-size:100% 1px;transition:none}
+  .js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:1;filter:none;transition:none}
+  .js .vs .vs-new::before{opacity:1}
+  .steps::after{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap bar">
+  <a class="brand" href="#top" aria-label="чую"><span class="brand-w">чую</span><span class="brand-t" id="tick" aria-hidden="true">00:00:00</span></a>
+  <nav>
+    <a href="#call"><span lang="uk">Розбір розмови</span><span lang="ru">Разбор разговора</span></a>
+    <a href="#team"><span lang="uk">Команда</span><span lang="ru">Команда</span></a>
+    <a href="#start"><span lang="uk">Тест</span><span lang="ru">Тест</span></a>
+    <a href="#faq"><span lang="uk">Питання</span><span lang="ru">Вопросы</span></a>
+  </nav>
+  <div class="ctl">
+    <div class="lang" id="langSeg"><button data-l="uk" aria-pressed="true">UA</button><button data-l="ru" aria-pressed="false">RU</button></div>
+    <button class="theme" id="themeBtn" aria-label="Тема: світла / темна"></button>
+  </div>
+  <a class="btn btn-sm" href="https://t.me/vlad_dev_studio" data-tg="header" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Написати в Telegram</span><span lang="ru">Написать в Telegram</span></a>
+</div></header>
+
+<main id="top">
+<section class="hero" id="hero" data-st="0">
+  <div class="hero-in wrap" id="heroIn">
+    <div class="hero-copy">
+      <h1><span lang="uk">Кожна розмова менеджера&nbsp;— <span class="nb gw">під лупою</span></span><span lang="ru">Каждый разговор менеджера&nbsp;— <span class="nb gw">под лупой</span></span></h1>
+      <p class="lead"><span lang="uk">ШІ розбирає записи дзвінків і Zoom-зустрічей за вашим скриптом і показує, де менеджер втратив клієнта: помилка, дослівна цитата, таймкод.</span><span lang="ru">ИИ разбирает записи звонков и Zoom-встреч по вашему скрипту и показывает, где менеджер потерял клиента: ошибка, дословная цитата, таймкод.</span></p>
+      <div class="cta">
+        <a class="btn" href="https://t.me/vlad_dev_studio" data-tg="hero" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Розібрати 3 мої розмови безкоштовно</span><span lang="ru">Разобрать 3 моих разговора бесплатно</span></a>
+        <a class="btn btn-line" href="#call"><span lang="uk">Приклад розбору</span><span lang="ru">Пример разбора</span></a>
+      </div>
+      <p class="fine"><span lang="uk">Тест: надсилаєте 3 записи, за 48 годин отримуєте розбір. Записи використовую тільки для тесту й видаляю після нього.</span><span lang="ru">Тест: присылаете 3 записи, через 48 часов получаете разбор. Записи использую только для теста и удаляю после него.</span></p>
+    </div>
+    <div class="stage" id="stage">
+      <div class="rig" id="rig">
+        <div class="sheet sheet-front"><img src="img/hero-weak.webp" srcset="img/hero-weak-900.webp 900w, img/hero-weak.webp 1543w" sizes="(max-width:940px) 100vw, 1100px" fetchpriority="high" decoding="async" width="1543" height="1084" data-uk="Картка розмови: слабкі місця з цитатами й таймкодами" data-ru="Карточка разговора: слабые места с цитатами и таймкодами" alt="">
+          <i class="hp" data-hp="a1" style="left:23%;top:33.4%"></i><i class="hp" data-hp="a2" style="left:15%;top:51.9%"></i><i class="hp" data-hp="a3" style="left:54%;top:51.9%"></i>
+          <i class="hp" data-hp="b1" style="left:15%;top:88.2%"></i><i class="hp" data-hp="b2" style="left:47%;top:88.2%"></i>
+        </div>
+      </div>
+      <p class="status" aria-live="off">
+        <span class="st-0"><span lang="uk">Реальна картка розмови із системи.</span><span lang="ru">Реальная карточка разговора из системы.</span> <span class="hov"><span lang="uk">Наведіть курсор — лупа ваша.</span><span lang="ru">Наведите курсор — лупа ваша.</span></span></span>
+        <span class="st-a"><b class="tc">19:52</b><span lang="uk">Клієнтка чекала меншої ціни — заперечення залишилось без уточнення.</span><span lang="ru">Клиентка ждала цену ниже — возражение осталось без уточнения.</span></span>
+        <span class="st-b"><b class="tc">21:02</b><span lang="uk">Домовленість — «скину сайт, а ви самі напишете». Наступний крок без дати.</span><span lang="ru">Договорённость — «скину сайт, а вы сами напишете». Следующий шаг без даты.</span></span>
+      </p>
+    </div>
+    <div class="tl" aria-hidden="true">
+      <span style="left:0">00:00</span><span style="left:22.727%">05:00</span><span style="left:45.455%">10:00</span><span style="left:68.182%">15:00</span>
+      <span class="pin pin-a" data-t="19:52" style="left:90.3%"></span><span class="pin pin-b" data-t="21:02" style="left:95.6%"></span>
+    </div>
+  </div>
+  <div class="mag" id="mag" aria-hidden="true"><div class="mag-view"><div class="mag-clone" id="magClone"></div></div><span class="mag-handle"></span><span class="mag-ring"></span></div>
+</section>
+
+<section class="sec sec-tint" id="why"><div class="wrap">
+  <div class="sec-head" data-rv><h2><span lang="uk">Керівник чує кілька розмов. Клієнти губляться в решті.</span><span lang="ru">Руководитель слышит несколько разговоров. Клиенты теряются в остальных.</span></h2></div>
+  <div class="vs" data-rv>
+    <div class="vs-row vs-head"><div class="vs-old"><span lang="uk">Без розбору</span><span lang="ru">Без разбора</span></div><div class="vs-new"><span><span lang="uk">З розбором</span><span lang="ru">С разбором</span></span></div></div>
+    <div class="vs-row"><div class="vs-old"><p><span class="sk"><span lang="uk">Слухаєте вибірково — скільки встигнете</span><span lang="ru">Слушаете выборочно — сколько успеете</span></span></p></div><div class="vs-new"><span><span lang="uk">Розібрана кожна розмова, за одним стандартом</span><span lang="ru">Разобран каждый разговор, по одному стандарту</span></span></div></div>
+    <div class="vs-row"><div class="vs-old"><p><span class="sk"><span lang="uk">«Клієнт не готовий» — зі слів менеджера</span><span lang="ru">«Клиент не готов» — со слов менеджера</span></span></p></div><div class="vs-new"><span><span lang="uk">Видно, хто винен: менеджер чи нецільовий клієнт</span><span lang="ru">Видно, кто виноват: менеджер или нецелевой клиент</span></span></div></div>
+    <div class="vs-row"><div class="vs-old"><p><span class="sk"><span lang="uk">Зауваження загальні: «краще відпрацьовуй заперечення»</span><span lang="ru">Замечания общие: «лучше отрабатывай возражения»</span></span></p></div><div class="vs-new"><span><span lang="uk">До кожної помилки — цитата й таймкод</span><span lang="ru">К каждой ошибке — цитата и таймкод</span></span></div></div>
+    <div class="vs-row"><div class="vs-old"><p><span class="sk"><span lang="uk">Навчання «про все потроху»</span><span lang="ru">Обучение «обо всём понемногу»</span></span></p></div><div class="vs-new"><span><span lang="uk">Видно, який критерій просідає в усієї команди</span><span lang="ru">Видно, какой критерий проседает у всей команды</span></span></div></div>
+  </div>
+</div></section>
+
+<section class="sec" id="call"><div class="wrap">
+  <div class="sec-head" data-rv><h2><span lang="uk">Одна розмова — п'ять відповідей</span><span lang="ru">Один разговор — пять ответов</span></h2>
+    <p class="sec-intro"><span lang="uk">Це реальна картка із системи. Ліворуч — розбір, праворуч — запис розмови й ШІ-чат, якому можна поставити будь-яке питання про неї.</span><span lang="ru">Это реальная карточка из системы. Слева — разбор, справа — запись разговора и ИИ-чат, которому можно задать любой вопрос о нём.</span></p></div>
+  <div data-rv>
+    <div class="vt" role="tablist" id="vt">
+      <button role="tab" aria-selected="true"><span lang="uk">Підсумок</span><span lang="ru">Итог</span></button>
+      <button role="tab" aria-selected="false"><span lang="uk">Слабкі місця</span><span lang="ru">Слабые места</span></button>
+      <button role="tab" aria-selected="false"><span lang="uk">Скрипт</span><span lang="ru">Скрипт</span></button>
+      <button role="tab" aria-selected="false"><span lang="uk">Клієнт</span><span lang="ru">Клиент</span></button>
+      <button role="tab" aria-selected="false"><span lang="uk">Транскрипт</span><span lang="ru">Транскрипт</span></button>
+      <i class="ind" id="ind"></i>
+    </div>
+    <div class="vqa-box" id="vqa">
+      <div class="vqa on"><h3><span lang="uk">Як пройшла розмова і хто винен, що клієнт не купив?</span><span lang="ru">Как прошёл разговор и кто виноват, что клиент не купил?</span></h3><p><span lang="uk">Загальна оцінка, шість критеріїв з вагами і короткий зміст. Окремий висновок: провал менеджера чи нецільовий клієнт. Тут — 79%, клієнтка зараз нецільова, менеджер не винен.</span><span lang="ru">Общая оценка, шесть критериев с весами и краткое содержание. Отдельный вывод: провал менеджера или нецелевой клиент. Здесь — 79%, клиентка сейчас нецелевая, менеджер не виноват.</span></p></div>
+      <div class="vqa"><h3><span lang="uk">Де саме менеджер недотиснув?</span><span lang="ru">Где именно менеджер недожал?</span></h3><p><span lang="uk">Кожна помилка з поясненням, порадою і дослівною цитатою. Тут дві: заперечення про ціну залишилось без уточнення (<span class="tc">19:52</span>) і наступний крок без конкретного часу (<span class="tc">21:02</span>).</span><span lang="ru">Каждая ошибка с пояснением, советом и дословной цитатой. Здесь две: возражение о цене осталось без уточнения (<span class="tc">19:52</span>) и следующий шаг без конкретного времени (<span class="tc">21:02</span>).</span></p></div>
+      <div class="vqa"><h3><span lang="uk">Що зі скрипта виконано, а що пропущено?</span><span lang="ru">Что из скрипта выполнено, а что пропущено?</span></h3><p><span lang="uk">Оцінка за кожним критерієм вашого скрипта з його вагою. Клік по критерію показує, чому оцінка саме така.</span><span lang="ru">Оценка по каждому критерию вашего скрипта с его весом. Клик по критерию показывает, почему оценка именно такая.</span></p></div>
+      <div class="vqa"><h3><span lang="uk">Що болить клієнту і чи готовий він купити?</span><span lang="ru">Что болит у клиента и готов ли он купить?</span></h3><p><span lang="uk">Профіль клієнта, готовність до покупки і болі — кожна з цитатою й таймкодом. Готова основа для наступного дзвінка.</span><span lang="ru">Профиль клиента, готовность к покупке и боли — каждая с цитатой и таймкодом. Готовая основа для следующего звонка.</span></p></div>
+      <div class="vqa"><h3><span lang="uk">Що було сказано дослівно?</span><span lang="ru">Что было сказано дословно?</span></h3><p><span lang="uk">Повна розшифровка з таймкодами. На скріні той самий момент із ціною — <span class="tc">19:52</span>. Текст можна скопіювати або завантажити.</span><span lang="ru">Полная расшифровка с таймкодами. На скрине тот самый момент с ценой — <span class="tc">19:52</span>. Текст можно скопировать или скачать.</span></p></div>
+    </div>
+    <div class="shot card-shot" id="shots">
+      <img class="on" src="img/card-summary.webp" srcset="img/card-summary-1280.webp 1280w, img/card-summary.webp 2144w" sizes="(max-width:940px) 1300px, 1124px" loading="lazy" decoding="async" width="2144" height="935" data-uk="Картка розмови, вкладка «Підсумок»: оцінки за критеріями, запис і ШІ-чат" data-ru="Карточка разговора, вкладка «Итог»: оценки по критериям, запись и ИИ-чат" alt="">
+      <img data-src="img/card-weak.webp" data-srcset="img/card-weak-1280.webp 1280w, img/card-weak.webp 2144w" sizes="(max-width:940px) 1300px, 1124px" decoding="async" width="2144" height="935" data-uk="Вкладка «Слабкі місця»: помилки з цитатами й таймкодами" data-ru="Вкладка «Слабые места»: ошибки с цитатами и таймкодами" alt="">
+      <img data-src="img/card-script.webp" data-srcset="img/card-script-1280.webp 1280w, img/card-script.webp 2144w" sizes="(max-width:940px) 1300px, 1124px" decoding="async" width="2144" height="935" data-uk="Вкладка «Скрипт»: виконання критеріїв" data-ru="Вкладка «Скрипт»: выполнение критериев" alt="">
+      <img data-src="img/card-client.webp" data-srcset="img/card-client-1280.webp 1280w, img/card-client.webp 2144w" sizes="(max-width:940px) 1300px, 1124px" decoding="async" width="2144" height="935" data-uk="Вкладка «Клієнт»: профіль, готовність до покупки, болі" data-ru="Вкладка «Клиент»: профиль, готовность к покупке, боли" alt="">
+      <img data-src="img/card-transcript.webp" data-srcset="img/card-transcript-1280.webp 1280w, img/card-transcript.webp 2144w" sizes="(max-width:940px) 1300px, 1124px" decoding="async" width="2144" height="935" data-uk="Вкладка «Транскрипт»: розшифровка з таймкодами" data-ru="Вкладка «Транскрипт»: расшифровка с таймкодами" alt="">
+    </div>
+    <p class="swipe"><span lang="uk">Гортайте картку вбік — праворуч запис і ШІ-чат.</span><span lang="ru">Листайте карточку вбок — справа запись и ИИ-чат.</span></p>
+    <div class="ask"><p><span lang="uk">Хочете побачити так свої розмови?</span><span lang="ru">Хотите увидеть так свои разговоры?</span></p><a class="btn" href="https://t.me/vlad_dev_studio" data-tg="call" data-m-uk="Привіт! Хочу такий самий розбір на своїх розмовах." data-m-ru="Здравствуйте! Хочу такой же разбор на своих разговорах." target="_blank" rel="noopener"><span lang="uk">Розібрати 3 мої розмови безкоштовно</span><span lang="ru">Разобрать 3 моих разговора бесплатно</span></a></div>
+  </div>
+</div></section>
+
+<section class="sec sec-tint" id="team"><div class="wrap">
+  <div class="sec-head" data-rv><h2><span lang="uk">Уся команда на одному екрані</span><span lang="ru">Вся команда на одном экране</span></h2>
+    <p class="sec-intro"><span lang="uk">Рядок — менеджер, колонка — критерій скрипта. Зверху система сама підказує, що просідає в усіх і кому потрібна допомога.</span><span lang="ru">Строка — менеджер, колонка — критерий скрипта. Сверху система сама подсказывает, что проседает у всех и кому нужна помощь.</span></p></div>
+  <div class="shot team-shot" data-rv><img src="img/team.webp" srcset="img/team-1200.webp 1200w, img/team.webp 2070w" sizes="(max-width:940px) 1000px, 1124px" width="2070" height="787" loading="lazy" decoding="async" data-uk="Карта команди: менеджери й оцінки за критеріями скрипта" data-ru="Карта команды: менеджеры и оценки по критериям скрипта" alt=""></div>
+  <p class="swipe"><span lang="uk">Гортайте таблицю вбік.</span><span lang="ru">Листайте таблицу вбок.</span></p>
+  <div class="notes" data-rv>
+    <div><h3><span lang="uk">Жовта колонка в усіх</span><span lang="ru">Жёлтая колонка у всех</span></h3><p><span lang="uk">Проблема не в людях, а в скрипті чи навчанні.</span><span lang="ru">Проблема не в людях, а в скрипте или обучении.</span></p></div>
+    <div><h3><span lang="uk">Жовтий рядок в одного</span><span lang="ru">Жёлтая строка у одного</span></h3><p><span lang="uk">Привід для розмови з конкретним менеджером.</span><span lang="ru">Повод для разговора с конкретным менеджером.</span></p></div>
+    <div><h3><span lang="uk">Тиждень, місяць, рік</span><span lang="ru">Неделя, месяц, год</span></h3><p><span lang="uk">Видно, чи дає результат навчання: оцінки ростуть чи стоять.</span><span lang="ru">Видно, даёт ли результат обучение: оценки растут или стоят.</span></p></div>
+  </div>
+  <div class="more" data-rv>
+    <button data-full="img/overview.webp"><div class="shot"><img src="img/overview-720.webp" width="720" height="345" loading="lazy" decoding="async" data-uk="Екран «Огляд»" data-ru="Экран «Обзор»" alt=""></div><h3><span lang="uk">Огляд</span><span lang="ru">Обзор</span></h3><p><span lang="uk">Зріз за період: скільки розмов, середня оцінка, критичні помилки.</span><span lang="ru">Срез за период: сколько разговоров, средняя оценка, критические ошибки.</span></p></button>
+    <button data-full="img/calls.webp"><div class="shot"><img src="img/calls-720.webp" width="720" height="345" loading="lazy" decoding="async" data-uk="Екран «Розмови»" data-ru="Экран «Разговоры»" alt=""></div><h3><span lang="uk">Розмови</span><span lang="ru">Разговоры</span></h3><p><span lang="uk">Усі розмови з фільтрами за менеджером, статусом і датою.</span><span lang="ru">Все разговоры с фильтрами по менеджеру, статусу и дате.</span></p></button>
+    <button data-full="img/scripts.webp"><div class="shot"><img src="img/scripts-720.webp" width="720" height="345" loading="lazy" decoding="async" data-uk="Екран «Скрипти»" data-ru="Экран «Скрипты»" alt=""></div><h3><span lang="uk">Скрипти</span><span lang="ru">Скрипты</span></h3><p><span lang="uk">Ваші скрипти й ваги критеріїв. Для кожного типу розмови — свій.</span><span lang="ru">Ваши скрипты и веса критериев. Для каждого типа разговора — свой.</span></p></button>
+  </div>
+</div></section>
+
+<section class="sec" id="calc"><div class="wrap">
+  <div class="sec-head" data-rv><h2><span lang="uk">Скільки коштує один втрачений продаж</span><span lang="ru">Сколько стоит одна потерянная продажа</span></h2>
+    <p class="sec-intro"><span lang="uk">Підставте свої цифри. Це не обіцянка результату, а ціна питання: скільки приносить один додатковий продаж на менеджера.</span><span lang="ru">Подставьте свои цифры. Это не обещание результата, а цена вопроса: сколько приносит одна дополнительная продажа на менеджера.</span></p></div>
+  <div class="calc" data-rv>
+    <div class="calc-in">
+      <div class="fld"><div class="lab"><label for="cM"><span lang="uk">Менеджерів у відділі</span><span lang="ru">Менеджеров в отделе</span></label><output id="cMo" for="cM">5</output></div><input type="range" id="cM" min="3" max="30" value="5"></div>
+      <div class="fld"><div class="lab"><label for="cP"><span lang="uk">Середній чек</span><span lang="ru">Средний чек</span></label><span class="cur" id="cur"><button type="button" aria-pressed="false">₴</button><button type="button" aria-pressed="true">$</button><button type="button" aria-pressed="false">€</button></span></div><input type="number" id="cP" value="500" min="0" step="50" inputmode="numeric"></div>
+      <div class="fld"><div class="lab"><label for="cK"><span lang="uk">Додаткових продажів на менеджера на місяць</span><span lang="ru">Дополнительных продаж на менеджера в месяц</span></label><output id="cKo" for="cK">1</output></div><input type="range" id="cK" min="1" max="5" value="1"></div>
+    </div>
+    <div class="calc-out" aria-live="polite">
+      <div class="big" id="outM">+2 500 $</div>
+      <p class="cap"><span lang="uk">на місяць</span><span lang="ru">в месяц</span></p>
+      <div class="yr"><span><span lang="uk">за рік</span><span lang="ru">за год</span></span><b id="outY">+30 000 $</b></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec sec-tint" id="start"><div class="wrap">
+  <div class="sec-head" data-rv><h2><span lang="uk">Почніть з безкоштовного тесту</span><span lang="ru">Начните с бесплатного теста</span></h2>
+    <p class="sec-intro"><span lang="uk">Спочатку ви бачите розбір власних розмов, потім вирішуєте. На тест беру до 3 команд на тиждень: кожен розбір перевіряю сам.</span><span lang="ru">Сначала вы видите разбор своих разговоров, потом решаете. На тест беру до 3 команд в неделю: каждый разбор проверяю сам.</span></p></div>
+  <ol class="steps" id="steps">
+    <li><h3><span lang="uk">Надсилаєте 3 записи</span><span lang="ru">Присылаете 3 записи</span></h3><p><span lang="uk">Дзвінки або Zoom-зустрічі ваших менеджерів. Якщо є скрипт — додайте і його.</span><span lang="ru">Звонки или Zoom-встречи ваших менеджеров. Если есть скрипт — добавьте и его.</span></p></li>
+    <li><h3><span lang="uk">За 48 годин — розбір</span><span lang="ru">Через 48 часов — разбор</span></h3><p><span lang="uk">Три розмови і три конкретні помилки з цитатами й таймкодами. 48 годин — це термін тесту, а не кожного розбору.</span><span lang="ru">Три разговора и три конкретные ошибки с цитатами и таймкодами. 48 часов — это срок теста, а не каждого разбора.</span></p></li>
+    <li><h3><span lang="uk">Короткий дзвінок</span><span lang="ru">Короткий звонок</span></h3><p><span lang="uk">Показую результат, обговорюємо ваш скрипт і критерії, називаю вартість.</span><span lang="ru">Показываю результат, обсуждаем ваш скрипт и критерии, называю стоимость.</span></p></li>
+    <li><h3><span lang="uk">Підключення</span><span lang="ru">Подключение</span></h3><p><span lang="uk">Налаштовую систему під вашу команду. Далі нові розмови розбираються автоматично.</span><span lang="ru">Настраиваю систему под вашу команду. Дальше новые разговоры разбираются автоматически.</span></p></li>
+  </ol>
+  <ul class="terms" data-rv>
+    <li><span lang="uk">Записи тільки для розбору — видаляю після тесту</span><span lang="ru">Записи только для разбора — удаляю после теста</span></li>
+    <li><span lang="uk">NDA — за запитом, до першого файлу</span><span lang="ru">NDA — по запросу, до первого файла</span></li>
+    <li><span lang="uk">Тест нічого не коштує і ні до чого не зобов'язує</span><span lang="ru">Тест ничего не стоит и ни к чему не обязывает</span></li>
+  </ul>
+  <div class="fit" data-rv>
+    <div><h3><span lang="uk">Підійде</span><span lang="ru">Подойдёт</span></h3><p><span lang="uk">Якщо у вас від 3 менеджерів, продажі йдуть через дзвінки або Zoom і розмови записуються: онлайн-школи, інфобізнес, агенції, B2B.</span><span lang="ru">Если у вас от 3 менеджеров, продажи идут через звонки или Zoom и разговоры записываются: онлайн-школы, инфобизнес, агентства, B2B.</span></p></div>
+    <div><h3><span lang="uk">Не підійде</span><span lang="ru">Не подойдёт</span></h3><p><span lang="uk">Якщо менеджер один або розмов кілька на тиждень — їх простіше послухати самому.</span><span lang="ru">Если менеджер один или разговоров несколько в неделю — их проще послушать самому.</span></p></div>
+  </div>
+</div></section>
+
+<section class="sec" id="about"><div class="wrap about" data-rv>
+  <div class="about-me">
+    <img class="me" src="img/vlad.jpg" alt="Влад" width="112" height="112" onerror="this.remove()">
+    <div>
+      <h2><span lang="uk">Хто це робить</span><span lang="ru">Кто это делает</span></h2>
+      <p><span lang="uk">Я Влад, розробник цієї системи. Сам працюю в продажах, тому робив її під реальні задачі керівника, а не «для галочки». Пишете в Telegram — відповідаю особисто.</span><span lang="ru">Я Влад, разработчик этой системы. Сам работаю в продажах, поэтому делал её под реальные задачи руководителя, а не «для галочки». Пишете в Telegram — отвечаю лично.</span></p>
+      <a class="btn btn-line" href="https://t.me/vlad_dev_studio" data-tg="about" target="_blank" rel="noopener"><span lang="uk">Написати Владу</span><span lang="ru">Написать Владу</span></a>
+    </div>
+  </div>
+  <ul class="facts">
+    <li><b>5</b><span><span lang="uk">менеджерів у відділі продажів, який уже працює із системою</span><span lang="ru">менеджеров в отделе продаж, который уже работает с системой</span></span></li>
+    <li><b>1000+</b><span><span lang="uk">розмов уже розібрано системою</span><span lang="ru">разговоров уже разобрано системой</span></span></li>
+    <li><b>7</b><span><span lang="uk">скриптів налаштовано під різні продукти й типи розмов</span><span lang="ru">скриптов настроено под разные продукты и типы разговоров</span></span></li>
+  </ul>
+</div></section>
+
+<section class="sec sec-tint" id="faq"><div class="wrap">
+  <div class="sec-head" data-rv><h2><span lang="uk">Питання</span><span lang="ru">Вопросы</span></h2></div>
+  <div class="faq" data-rv>
+    <details><summary><span lang="uk">Скільки це коштує?</span><span lang="ru">Сколько это стоит?</span></summary><p><span lang="uk">Залежить від кількості менеджерів і розмов. Називаю вартість на дзвінку після тесту, коли ви вже бачили результат на своїх розмовах.</span><span lang="ru">Зависит от количества менеджеров и разговоров. Называю стоимость на звонке после теста, когда вы уже видели результат на своих разговорах.</span></p></details>
+    <details><summary><span lang="uk">ШІ може помилитись?</span><span lang="ru">ИИ может ошибиться?</span></summary><p><span lang="uk">Може, як і людина. Тому кожен висновок підкріплений цитатою й таймкодом: перевірити його — хвилина. У розшифровці теж трапляються неточні слова, особливо на записі поганої якості.</span><span lang="ru">Может, как и человек. Поэтому каждый вывод подкреплён цитатой и таймкодом: проверить его — минута. В расшифровке тоже встречаются неточные слова, особенно на записи плохого качества.</span></p></details>
+    <details><summary><span lang="uk">Менеджерам треба щось міняти в роботі?</span><span lang="ru">Менеджерам нужно что-то менять в работе?</span></summary><p><span lang="uk">Ні. Вони працюють як раніше. Потрібно лише, щоб розмови записувались.</span><span lang="ru">Нет. Они работают как раньше. Нужно только, чтобы разговоры записывались.</span></p></details>
+    <details><summary><span lang="uk">Хто бачить наші розмови?</span><span lang="ru">Кто видит наши разговоры?</span></summary><p><span lang="uk">У системі доступ за ролями: менеджер бачить тільки свої розмови, керівник — усю команду. Записи з тесту видаляю після розбору. Де і скільки зберігаються записи після підключення, узгоджуємо до першого файлу.</span><span lang="ru">В системе доступ по ролям: менеджер видит только свои разговоры, руководитель — всю команду. Записи с теста удаляю после разбора. Где и сколько хранятся записи после подключения, согласуем до первого файла.</span></p></details>
+  </div>
+</div></section>
+
+<section class="final" id="final"><div class="wrap">
+  <h2 data-rv><span lang="uk">Надішліть 3 записи. За 48 годин покажу, де губляться клієнти.</span><span lang="ru">Пришлите 3 записи. Через 48 часов покажу, где теряются клиенты.</span></h2>
+  <p><span lang="uk">Тест безкоштовний. Якщо помилок не знайду — так і скажу.</span><span lang="ru">Тест бесплатный. Если ошибок не найду — так и скажу.</span></p>
+  <a class="btn btn-accent" href="https://t.me/vlad_dev_studio" data-tg="final" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Написати в Telegram</span><span lang="ru">Написать в Telegram</span></a>
+</div></section>
+</main>
+<footer><div class="wrap"><span><span lang="uk">чую — ШІ-аналіз дзвінків для відділів продажів</span><span lang="ru">чую — ИИ-анализ звонков для отделов продаж</span></span><span>Влад · <a href="https://t.me/vlad_dev_studio" target="_blank" rel="noopener">@vlad_dev_studio</a></span></div></footer>
+<div class="dock" id="dock"><a class="btn btn-accent" href="https://t.me/vlad_dev_studio" data-tg="dock" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Розібрати 3 мої розмови безкоштовно</span><span lang="ru">Разобрать 3 моих разговора бесплатно</span></a></div>
+<dialog id="lb"><div class="lbw"><img alt="" id="lbImg"></div></dialog>
+
+<script>
+(function(){
+  var root=document.documentElement;root.classList.add('js');
+  function $(id){return document.getElementById(id)}
+  function all(s,el){return [].slice.call((el||document).querySelectorAll(s))}
+  function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  function ld(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  var TITLE={uk:'чую — ШІ-аналіз дзвінків для відділів продажів',ru:'чую — ИИ-анализ звонков для отделов продаж'};
+  var afterLayout=[];
+  function setLang(l){root.dataset.lang=l;root.lang=l;document.title=TITLE[l];
+    all('#langSeg button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===l)});
+    all('img[data-uk]').forEach(function(i){i.alt=i.dataset[l]});sv('lang',l);
+    afterLayout.forEach(function(f){f()})}
+  function setTheme(t){root.dataset.theme=t;sv('theme',t)}
+  all('#langSeg button').forEach(function(b){b.onclick=function(){setLang(b.dataset.l)}});
+  $('themeBtn').onclick=function(){setTheme(root.dataset.theme==='dark'?'light':'dark')};
+  setTheme(ld('theme')||'light');
+
+  /* telegram buttons: ready-made first message + optional click counter */
+  var TG='https://t.me/vlad_dev_studio',GA_ID='';
+  afterLayout.push(function(){var l=root.dataset.lang;all('a[data-tg]').forEach(function(a){var m=a.getAttribute('data-m-'+l);a.href=m?TG+'?text='+encodeURIComponent(m):TG})});
+  if(GA_ID){var g=document.createElement('script');g.async=true;g.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;document.head.appendChild(g);
+    window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config',GA_ID)}
+  all('a[data-tg]').forEach(function(a){a.addEventListener('click',function(){if(window.gtag)gtag('event','cta_click',{place:a.dataset.tg,lang:root.dataset.lang})})});
+
+  /* calculator */
+  var cM=$('cM'),cK=$('cK'),cP=$('cP'),outM=$('outM'),outY=$('outY'),sym='$',shown=2500,goal=2500,craf=0;
+  function fmt(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g,'\u00a0')}
+  function paint(v){outM.textContent='+'+fmt(v)+'\u00a0'+sym;outY.textContent='+'+fmt(v*12)+'\u00a0'+sym;outM.classList.toggle('long',fmt(v).length>7)}
+  function fill(r){r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%')}
+  function calc(){fill(cM);fill(cK);$('cMo').textContent=cM.value;$('cKo').textContent=cK.value;
+    goal=(+cM.value)*(+cK.value)*Math.max(0,parseFloat(cP.value)||0);cancelAnimationFrame(craf);
+    var from=shown,t0=performance.now();(function step(n){var p=Math.min(1,(n-t0)/320);shown=from+(goal-from)*(1-Math.pow(1-p,3));paint(shown);if(p<1)craf=requestAnimationFrame(step)})(t0)}
+  [cM,cK,cP].forEach(function(e){e.addEventListener('input',calc)});
+  all('#cur button').forEach(function(b){b.onclick=function(){sym=b.textContent;all('#cur button').forEach(function(x){x.setAttribute('aria-pressed',x===b)});paint(shown)}});
+  fill(cM);fill(cK);paint(shown);
+
+  /* brand timecode */
+  var born=Date.now(),tick=$('tick');
+  function p2(n){return(n<10?'0':'')+n}
+  setInterval(function(){var s=Math.floor((Date.now()-born)/1000);tick.textContent=p2(Math.floor(s/3600))+':'+p2(Math.floor(s/60)%60)+':'+p2(s%60)},1000);
+
+  /* call viewer */
+  var tabs=all('#vt button'),ind=$('ind'),qas=all('#vqa .vqa'),shots=all('#shots img'),curTab=0;
+  function setTab(i){curTab=i;
+    tabs.forEach(function(b,j){b.setAttribute('aria-selected',j===i)});
+    qas.forEach(function(q,j){q.classList.toggle('on',j===i)});
+    var im=shots[i];need(im);
+    function show(){if(curTab!==i)return;shots.forEach(function(s,j){s.classList.toggle('on',j===i)});$('shots').scrollLeft=0}
+    if(im.complete&&im.naturalWidth)show();else{im.addEventListener('load',show,{once:true});im.addEventListener('error',show,{once:true})}
+    var b=tabs[i];ind.style.width=b.offsetWidth+'px';ind.style.transform='translateX('+b.offsetLeft+'px)';
+  }
+  function need(im){if(!im.getAttribute('src')&&im.dataset.src){im.srcset=im.dataset.srcset;im.src=im.dataset.src}}
+  var warmed=false;function warm(){if(warmed)return;warmed=true;shots.forEach(need)}
+  $('vt').addEventListener('pointerenter',warm);$('vt').addEventListener('touchstart',warm,{passive:true});
+  tabs.forEach(function(b,i){b.onclick=function(){setTab(i)};
+    b.onkeydown=function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(d){var n=(i+d+tabs.length)%tabs.length;setTab(n);tabs[n].focus()}}});
+  afterLayout.push(function(){setTab(curTab)});
+
+  /* lightbox */
+  var lb=$('lb'),lbImg=$('lbImg');
+  all('.more button').forEach(function(b){b.onclick=function(){lbImg.src=b.dataset.full;if(lb.showModal)lb.showModal()}});
+  lb.onclick=function(){lb.close()};
+
+  /* phone: pinned button between the hero and the final block */
+  var dock=$('dock'),seen={hero:true,final:false};
+  if('IntersectionObserver' in window){var dio=new IntersectionObserver(function(es){es.forEach(function(e){seen[e.target.id]=e.isIntersecting});dock.classList.toggle('on',!seen.hero&&!seen.final)});dio.observe($('hero'));dio.observe($('final'))}
+
+  /* reveal */
+  var rv=all('[data-rv]').concat([$('steps')]);
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -12% 0px'});
+    rv.forEach(function(e){io.observe(e)});
+  }else rv.forEach(function(e){e.classList.add('in')});
+
+  /* ---------- lens ---------- */
+  var hero=$('hero'),heroIn=$('heroIn'),mag=$('mag'),box=$('magClone'),stage=$('stage'),rig=$('rig'),clone,R=100;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function build(){box.textContent='';clone=heroIn.cloneNode(true);clone.removeAttribute('id');
+    all('[id]',clone).forEach(function(e){e.removeAttribute('id')});
+    clone.setAttribute('aria-hidden','true');clone.inert=true;clone.classList.add('is-clone');box.appendChild(clone);measure()}
+  function measure(){var r=heroIn.getBoundingClientRect();clone.style.width=r.width+'px';clone.style.height=r.height+'px';R=mag.offsetWidth/2}
+  function phrase(){return heroIn.querySelector('h1 [lang="'+root.dataset.lang+'"] .gw')}
+  function hp(k){return heroIn.querySelector('[data-hp="'+k+'"]')}
+  function pt(el,fx,hr){var r=el.getBoundingClientRect();return{x:r.left+r.width*fx-hr.left,y:r.top+r.height/2-hr.top}}
+  var seq=[
+    {k:'ph',fx:.14,z:1.42,st:'0',move:1000,hold:250},
+    {k:'ph',fx:.86,z:1.42,st:'0',move:1900,hold:400},
+    {k:'a1',fx:0,z:2,st:'a',move:1300,hold:900},
+    {k:'a2',fx:0,z:2,st:'a',move:700,hold:150},
+    {k:'a3',fx:0,z:2,st:'a',move:2100,hold:600},
+    {k:'b1',fx:0,z:2,st:'b',move:1200,hold:200},
+    {k:'b2',fx:0,z:2,st:'b',move:1900,hold:900}
+  ];
+  var narrow=window.matchMedia?matchMedia('(max-width:940px)'):{matches:false};
+  function next(i){do{i=(i+1)%seq.length}while(narrow.matches&&seq[i].k==='ph');return i}
+  function target(s,hr){return pt(s.k==='ph'?phrase():hp(s.k),s.fx,hr)}
+  function ease(p){return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2}
+  var cur={x:0,y:0,z:1.42},from={x:0,y:0,z:1.42},idx=0,t0=0,manual=false,ptr={x:0,y:0},leaveT=0,
+      tilt={x:0,y:0,tx:0,ty:0},lens={rx:0,ry:0},last=0,running=false,visible=true,started=false;
+  function draw(hr){
+    var ir=heroIn.getBoundingClientRect(),ox=ir.left-hr.left,oy=ir.top-hr.top;
+    mag.style.transform='translate3d('+(cur.x-R)+'px,'+(cur.y-R)+'px,0) perspective(700px) rotateX('+lens.rx.toFixed(2)+'deg) rotateY('+lens.ry.toFixed(2)+'deg)';
+    clone.style.transform='translate('+(R-(cur.x-ox)*cur.z)+'px,'+(R-(cur.y-oy)*cur.z)+'px) scale('+cur.z+')';
+  }
+  function nearest(hr){var best='0',bd=130;
+    [['a','a1'],['a','a2'],['a','a3'],['b','b1'],['b','b2']].forEach(function(p){var q=pt(hp(p[1]),0,hr),d=Math.hypot(q.x-cur.x,q.y-cur.y);if(d<bd){bd=d;best=p[0]}});
+    return best}
+  function frame(now){
+    if(!running)return;
+    var dt=Math.min(50,now-last||16);last=now;
+    var hr=hero.getBoundingClientRect(),px=cur.x,py=cur.y;
+    tilt.x+=(tilt.tx-tilt.x)*(1-Math.exp(-dt/260));tilt.y+=(tilt.ty-tilt.y)*(1-Math.exp(-dt/260));
+    hero.style.setProperty('--tx',tilt.x.toFixed(3)+'deg');hero.style.setProperty('--ty',tilt.y.toFixed(3)+'deg');
+    if(manual){
+      var k=1-Math.exp(-dt/70);cur.x+=(ptr.x-hr.left-cur.x)*k;cur.y+=(ptr.y-hr.top-cur.y)*k;cur.z+=(2-cur.z)*k;
+      var n=nearest(hr);if(hero.dataset.st!==n)hero.dataset.st=n;
+    }else{
+      var s=seq[idx],tg=target(s,hr),p=Math.min(1,(now-t0)/s.move),e=ease(p);
+      cur.x=from.x+(tg.x-from.x)*e;cur.y=from.y+(tg.y-from.y)*e;cur.z=from.z+(s.z-from.z)*e;
+      if(p>.55&&hero.dataset.st!==s.st)hero.dataset.st=s.st;
+      if(now-t0>s.move+s.hold){from={x:cur.x,y:cur.y,z:cur.z};idx=next(idx);t0=now}
+    }
+    var vx=(cur.x-px)/dt*16,vy=(cur.y-py)/dt*16,kk=1-Math.exp(-dt/140);
+    lens.ry+=(Math.max(-11,Math.min(11,vx*1.1))-lens.ry)*kk;lens.rx+=(Math.max(-11,Math.min(11,-vy*1.1))-lens.rx)*kk;
+    draw(hr);requestAnimationFrame(frame);
+  }
+  function run(){if(running||!started||!visible||document.hidden)return;running=true;requestAnimationFrame(function(n){last=n;from={x:cur.x,y:cur.y,z:cur.z};t0=n;frame(n)})}
+  function stop(){running=false}
+  function place(){var hr=hero.getBoundingClientRect(),a=pt(hp('a2'),0,hr),b=pt(hp('a3'),0,hr);cur.x=(a.x+b.x)/2;cur.y=a.y;cur.z=2;hero.dataset.st='a';draw(hr)}
+  function start(){
+    build();if(narrow.matches)idx=2;var hr=hero.getBoundingClientRect(),f=target(seq[idx],hr);
+    cur.x=from.x=f.x;cur.y=from.y=f.y-10;started=true;mag.classList.add('on');
+    if(reduce){place()}else run();
+  }
+  stage.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||!started)return;
+    var r=rig.getBoundingClientRect();if(e.clientX<r.left-30||e.clientX>r.right+30||e.clientY<r.top-30||e.clientY>r.bottom+30){release();return}
+    clearTimeout(leaveT);ptr.x=e.clientX;ptr.y=e.clientY;
+    if(!manual){manual=true;stage.classList.add('manual');if(reduce){running=true;last=0;requestAnimationFrame(frame)}}});
+  function release(){if(!manual)return;clearTimeout(leaveT);leaveT=setTimeout(function(){manual=false;stage.classList.remove('manual');
+    if(reduce){stop();place();return}from={x:cur.x,y:cur.y,z:cur.z};t0=performance.now();idx=2},700)}
+  stage.addEventListener('pointerleave',release);
+  hero.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||reduce)return;var r=hero.getBoundingClientRect();
+    tilt.tx=((e.clientX-r.left)/r.width-.5)*5;tilt.ty=-((e.clientY-r.top)/r.height-.5)*4});
+  hero.addEventListener('pointerleave',function(){tilt.tx=0;tilt.ty=0});
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){visible=es[0].isIntersecting;if(visible)run();else stop()},{threshold:.05}).observe(hero)}
+  document.addEventListener('visibilitychange',function(){if(document.hidden)stop();else run()});
+  var rz;window.addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(function(){if(!started)return;measure();setTab(curTab);if(reduce)place()},120)});
+  afterLayout.push(function(){if(started){measure();if(reduce)place()}});
+
+  setLang(ld('lang')||'uk');
+  function boot(){setTab(curTab);setTimeout(start,reduce?0:900)}
+  if(document.readyState==='complete')boot();else window.addEventListener('load',boot);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){setTab(curTab);if(started)measure()});
+})();
+</script>
+</body>
+</html>
