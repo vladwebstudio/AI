@@ -233,6 +233,14 @@ input[type=number]:focus{outline:0;border-color:var(--accent)}
 .notes{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:38px}
 .notes h3{font-size:20px;letter-spacing:-.015em;padding-top:16px;border-top:1.5px solid var(--ink);margin-bottom:8px}
 .notes p{color:var(--muted);font-size:16px}
+.chat-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1fr);gap:clamp(32px,5vw,72px);align-items:center}
+.chat-grid h2{max-width:12em}
+.qs{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:10px}
+.qs li{padding:14px 18px;border:1px solid var(--line);border-radius:14px;background:var(--bg);font:500 16.5px/1.35 var(--f-body);color:var(--ink);transition:background-color .35s,border-color .35s}
+.chat-shot{border-radius:16px}
+.chat-shot img{width:100%;height:auto}
+.chat-note{margin-top:14px;color:var(--muted);font-size:14.5px}
+.chat-cta{margin-top:28px}
 .more{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:clamp(48px,6vw,80px)}
 .more button{display:block;width:100%;background:none;border:0;padding:0;text-align:left;cursor:zoom-in}
 .more .shot{border-radius:9px;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
@@ -303,6 +311,8 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .card-shot img.on{display:block}
   .swipe{display:block}
   .notes,.more{grid-template-columns:1fr;gap:26px}
+  .chat-grid{grid-template-columns:1fr}
+  .chat-cta .btn{width:100%}
   .steps{grid-template-columns:1fr;gap:26px}
   .steps::before,.steps::after{left:21px;right:auto;top:0;bottom:0;width:1px;height:auto}
   .steps::after{transform-origin:50% 0;transform:scaleY(0)}
@@ -440,7 +450,24 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </div></section>
 
-<section class="sec sec-tint" id="team"><div class="wrap">
+<section class="sec sec-tint" id="chat"><div class="wrap chat-grid">
+  <div data-rv>
+    <h2><span lang="uk">Є точкове питання? Запитайте ШІ</span><span lang="ru">Есть точечный вопрос? Спросите ИИ</span></h2>
+    <p class="sec-intro"><span lang="uk">Окрім готового розбору, у кожній розмові є ШІ-чат. Напишіть своє питання, і за секунди отримаєте відповідь за повною розшифровкою, з цитатами й таймкодами, щоб усе можна було перевірити.</span><span lang="ru">Кроме готового разбора, в каждом разговоре есть ИИ-чат. Напишите свой вопрос, и за секунды получите ответ по полной расшифровке, с цитатами и таймкодами, чтобы всё можно было проверить.</span></p>
+    <ul class="qs">
+      <li><span lang="uk">Що саме зупинило клієнта від покупки?</span><span lang="ru">Что именно остановило клиента от покупки?</span></li>
+      <li><span lang="uk">Яке заперечення менеджер пропустив?</span><span lang="ru">Какое возражение менеджер пропустил?</span></li>
+      <li><span lang="uk">Що сказати клієнту під час повторного контакту?</span><span lang="ru">Что сказать клиенту при повторном контакте?</span></li>
+    </ul>
+    <div class="chat-cta"><a class="btn" href="https://t.me/vlad_dev_studio" data-tg="chat" data-m-uk="Привіт! Хочу спробувати ШІ-чат на своїх розмовах." data-m-ru="Здравствуйте! Хочу попробовать ИИ-чат на своих разговорах." target="_blank" rel="noopener"><span lang="uk">Спробувати на моїх розмовах</span><span lang="ru">Попробовать на моих разговорах</span></a></div>
+  </div>
+  <div data-rv>
+    <div class="shot chat-shot"><img src="img/ai-chat.webp" srcset="img/ai-chat-720.webp 720w, img/ai-chat.webp 1112w" sizes="(max-width:940px) 92vw, 560px" width="1112" height="1004" loading="lazy" decoding="async" data-uk="ШІ-чат: питання українською і відповідь з цитатами та таймкодами" data-ru="ИИ-чат: вопрос на украинском и ответ с цитатами и таймкодами" alt=""></div>
+    <p class="chat-note"><span lang="uk">Приклад із системи: питання й відповідь ШІ по одній із розмов.</span><span lang="ru">Пример из системы: вопрос и ответ ИИ по одному из разговоров.</span></p>
+  </div>
+</div></section>
+
+<section class="sec" id="team"><div class="wrap">
   <div class="sec-head" data-rv><h2><span lang="uk">Уся команда на одному екрані</span><span lang="ru">Вся команда на одном экране</span></h2>
     <p class="sec-intro"><span lang="uk">Рядок — менеджер, колонка — критерій скрипта. Зверху система сама підказує, що просідає в усіх і кому потрібна допомога.</span><span lang="ru">Строка — менеджер, колонка — критерий скрипта. Сверху система сама подсказывает, что проседает у всех и кому нужна помощь.</span></p></div>
   <div class="shot team-shot" data-rv><img src="img/team.webp" srcset="img/team-1200.webp 1200w, img/team.webp 2070w" sizes="(max-width:940px) 1000px, 1124px" width="2070" height="787" loading="lazy" decoding="async" data-uk="Карта команди: менеджери й оцінки за критеріями скрипта" data-ru="Карта команды: менеджеры и оценки по критериям скрипта" alt=""></div>
@@ -457,7 +484,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </div></section>
 
-<section class="sec" id="calc"><div class="wrap">
+<section class="sec sec-tint" id="calc"><div class="wrap">
   <div class="sec-head" data-rv><h2><span lang="uk">Скільки коштує один втрачений продаж</span><span lang="ru">Сколько стоит одна потерянная продажа</span></h2>
     <p class="sec-intro"><span lang="uk">Підставте свої цифри. Це не обіцянка результату, а ціна питання: скільки приносить один додатковий продаж на менеджера.</span><span lang="ru">Подставьте свои цифры. Это не обещание результата, а цена вопроса: сколько приносит одна дополнительная продажа на менеджера.</span></p></div>
   <div class="calc" data-rv>
@@ -474,7 +501,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </div></section>
 
-<section class="sec sec-tint" id="start"><div class="wrap">
+<section class="sec" id="start"><div class="wrap">
   <div class="sec-head" data-rv><h2><span lang="uk">Почніть з безкоштовного тесту</span><span lang="ru">Начните с бесплатного теста</span></h2>
     <p class="sec-intro"><span lang="uk">Спочатку ви бачите розбір власних розмов, потім вирішуєте. На тест беру до 3 команд на тиждень: кожен розбір перевіряю сам.</span><span lang="ru">Сначала вы видите разбор своих разговоров, потом решаете. На тест беру до 3 команд в неделю: каждый разбор проверяю сам.</span></p></div>
   <ol class="steps" id="steps">
@@ -494,7 +521,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
 </div></section>
 
-<section class="sec" id="about"><div class="wrap about" data-rv>
+<section class="sec sec-tint" id="about"><div class="wrap about" data-rv>
   <div class="about-me">
     <img class="me" src="img/vlad.jpg" alt="Влад" width="112" height="112" onerror="this.remove()">
     <div>
@@ -510,7 +537,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </ul>
 </div></section>
 
-<section class="sec sec-tint" id="faq"><div class="wrap">
+<section class="sec" id="faq"><div class="wrap">
   <div class="sec-head" data-rv><h2><span lang="uk">Питання</span><span lang="ru">Вопросы</span></h2></div>
   <div class="faq" data-rv>
     <details><summary><span lang="uk">Скільки це коштує?</span><span lang="ru">Сколько это стоит?</span></summary><p><span lang="uk">Залежить від кількості менеджерів і розмов. Називаю вартість на дзвінку після тесту, коли ви вже бачили результат на своїх розмовах.</span><span lang="ru">Зависит от количества менеджеров и разговоров. Называю стоимость на звонке после теста, когда вы уже видели результат на своих разговорах.</span></p></details>
