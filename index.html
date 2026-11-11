@@ -73,6 +73,10 @@ html[data-lang=uk] [lang=ru],html[data-lang=ru] [lang=uk]{display:none}
 .btn-sm{padding:10px 17px;font-size:14px}
 .btn-line{background:none;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
 .btn-accent{background:var(--accent);color:var(--on-accent)}
+.btn-go{position:relative;box-shadow:0 0 0 1.5px var(--accent)}
+.btn-go::after{content:"";position:absolute;inset:-1.5px;border-radius:999px;border:1.5px solid var(--accent);opacity:0;pointer-events:none;animation:ring 3.6s cubic-bezier(.2,.6,.3,1) 2.2s infinite}
+.btn-go:hover::after,.btn-go:focus-visible::after{animation:none}
+@keyframes ring{0%{opacity:0;transform:scale(1)}10%{opacity:.55}65%,100%{opacity:0;transform:scale(1.07,1.3)}}
 
 /* hero */
 .hero{position:relative;overflow:hidden;--tx:0deg;--ty:0deg}
@@ -339,6 +343,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .js .vs .vs-row:not(.vs-head) .vs-new>span{opacity:1;filter:none;transition:none}
   .js .vs .vs-new::before{opacity:1}
   .steps::after{transition:none}
+  .btn-go::after{animation:none}
 }
 </style>
 </head>
@@ -366,7 +371,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <h1><span lang="uk">Кожна розмова менеджера&nbsp;— <span class="nb gw">під лупою</span></span><span lang="ru">Каждый разговор менеджера&nbsp;— <span class="nb gw">под лупой</span></span></h1>
       <p class="lead"><span lang="uk">ШІ розбирає записи дзвінків і Zoom-зустрічей за вашим скриптом і показує, де менеджер втратив клієнта: помилка, дослівна цитата, таймкод.</span><span lang="ru">ИИ разбирает записи звонков и Zoom-встреч по вашему скрипту и показывает, где менеджер потерял клиента: ошибка, дословная цитата, таймкод.</span></p>
       <div class="cta">
-        <a class="btn" href="https://t.me/vlad_dev_studio" data-tg="hero" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Розібрати 3 мої розмови безкоштовно</span><span lang="ru">Разобрать 3 моих разговора бесплатно</span></a>
+        <a class="btn btn-go" href="https://t.me/vlad_dev_studio" data-tg="hero" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Розібрати 3 мої розмови безкоштовно</span><span lang="ru">Разобрать 3 моих разговора бесплатно</span></a>
         <a class="btn btn-line" href="#call"><span lang="uk">Приклад розбору</span><span lang="ru">Пример разбора</span></a>
       </div>
       <p class="fine"><span lang="uk">Тест: надсилаєте 3 записи, за 48 годин отримуєте розбір. Записи використовую тільки для тесту й видаляю після нього.</span><span lang="ru">Тест: присылаете 3 записи, через 48 часов получаете разбор. Записи использую только для теста и удаляю после него.</span></p>
