@@ -323,10 +323,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   .calc,.about,.terms{grid-template-columns:1fr}
   .about-me{flex-direction:column;gap:20px}
   .ask .btn{width:100%}
-  .dock{display:block;position:fixed;left:12px;right:12px;bottom:12px;z-index:25;transform:translateY(160%);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-  .dock.on{transform:none}
+  .dock{display:block;position:fixed;left:12px;right:12px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:25;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(24px);transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s,visibility 0s .45s}
+  .dock.on{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s,visibility 0s}
   .dock .btn{width:100%;box-shadow:0 16px 34px -10px rgba(0,0,0,.55)}
-  footer{padding-bottom:92px}
+  footer{padding-bottom:104px}
 }
 @media(max-width:640px){
   :root{--pad:20px}
@@ -385,7 +385,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
         <a class="btn btn-go" href="https://t.me/vlad_dev_studio" data-tg="hero" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Розібрати 3 мої розмови безкоштовно</span><span lang="ru">Разобрать 3 моих разговора бесплатно</span></a>
         <a class="btn btn-line" href="#call"><span lang="uk">Приклад розбору</span><span lang="ru">Пример разбора</span></a>
       </div>
-      <p class="fine"><span lang="uk">Тест: надсилаєте 3 записи, за 48 годин отримуєте розбір. Записи використовую тільки для тесту й видаляю після нього.</span><span lang="ru">Тест: присылаете 3 записи, через 48 часов получаете разбор. Записи использую только для теста и удаляю после него.</span></p>
+      <p class="fine"><span lang="uk">Тест: надсилаєте 3 записи, за 24 години отримуєте розбір. Записи використовую тільки для тесту й видаляю після нього.</span><span lang="ru">Тест: присылаете 3 записи, через 24 часа получаете разбор. Записи использую только для теста и удаляю после него.</span></p>
     </div>
     <div class="stage" id="stage">
       <div class="rig" id="rig">
@@ -506,7 +506,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     <p class="sec-intro"><span lang="uk">Спочатку ви бачите розбір власних розмов, потім вирішуєте. На тест беру до 3 команд на тиждень: кожен розбір перевіряю сам.</span><span lang="ru">Сначала вы видите разбор своих разговоров, потом решаете. На тест беру до 3 команд в неделю: каждый разбор проверяю сам.</span></p></div>
   <ol class="steps" id="steps">
     <li><h3><span lang="uk">Надсилаєте 3 записи</span><span lang="ru">Присылаете 3 записи</span></h3><p><span lang="uk">Дзвінки або Zoom-зустрічі ваших менеджерів. Якщо є скрипт — додайте і його.</span><span lang="ru">Звонки или Zoom-встречи ваших менеджеров. Если есть скрипт — добавьте и его.</span></p></li>
-    <li><h3><span lang="uk">За 48 годин — розбір</span><span lang="ru">Через 48 часов — разбор</span></h3><p><span lang="uk">Три розмови і три конкретні помилки з цитатами й таймкодами. 48 годин — це термін тесту, а не кожного розбору.</span><span lang="ru">Три разговора и три конкретные ошибки с цитатами и таймкодами. 48 часов — это срок теста, а не каждого разбора.</span></p></li>
+    <li><h3><span lang="uk">За 24 години — розбір</span><span lang="ru">Через 24 часа — разбор</span></h3><p><span lang="uk">Три розмови і три конкретні помилки з цитатами й таймкодами. 24 години — це термін тесту, а не кожного розбору.</span><span lang="ru">Три разговора и три конкретные ошибки с цитатами и таймкодами. 24 часа — это срок теста, а не каждого разбора.</span></p></li>
     <li><h3><span lang="uk">Короткий дзвінок</span><span lang="ru">Короткий звонок</span></h3><p><span lang="uk">Показую результат, обговорюємо ваш скрипт і критерії, називаю вартість.</span><span lang="ru">Показываю результат, обсуждаем ваш скрипт и критерии, называю стоимость.</span></p></li>
     <li><h3><span lang="uk">Підключення</span><span lang="ru">Подключение</span></h3><p><span lang="uk">Налаштовую систему під вашу команду. Далі нові розмови розбираються автоматично.</span><span lang="ru">Настраиваю систему под вашу команду. Дальше новые разговоры разбираются автоматически.</span></p></li>
   </ol>
@@ -548,7 +548,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 </div></section>
 
 <section class="final" id="final"><div class="wrap">
-  <h2 data-rv><span lang="uk">Надішліть 3 записи. За 48 годин покажу, де губляться клієнти.</span><span lang="ru">Пришлите 3 записи. Через 48 часов покажу, где теряются клиенты.</span></h2>
+  <h2 data-rv><span lang="uk">Надішліть 3 записи. За 24 години покажу, де губляться клієнти.</span><span lang="ru">Пришлите 3 записи. Через 24 часа покажу, где теряются клиенты.</span></h2>
   <p><span lang="uk">Тест безкоштовний. Якщо помилок не знайду — так і скажу.</span><span lang="ru">Тест бесплатный. Если ошибок не найду — так и скажу.</span></p>
   <a class="btn btn-accent" href="https://t.me/vlad_dev_studio" data-tg="final" data-m-uk="Привіт! Хочу безкоштовний розбір 3 розмов." data-m-ru="Здравствуйте! Хочу бесплатный разбор 3 разговоров." target="_blank" rel="noopener"><span lang="uk">Написати в Telegram</span><span lang="ru">Написать в Telegram</span></a>
 </div></section>
