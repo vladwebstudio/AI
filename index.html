@@ -644,18 +644,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   var seq=[
     {k:'ph',fx:.14,z:1.42,st:'0',move:1000,hold:250},
     {k:'ph',fx:.86,z:1.42,st:'0',move:1900,hold:400},
-    {k:'a1',fx:0,z:2,st:'a',move:1100,hold:150},
-    {k:'a1e',fx:0,z:2,st:'a',move:1700,hold:300},
-    {k:'a2',fx:0,z:2,st:'a',move:900,hold:100},
-    {k:'a2e',fx:0,z:2,st:'a',move:1500,hold:300},
-    {k:'a3',fx:0,z:2,st:'a',move:700,hold:100},
-    {k:'a3e',fx:0,z:2,st:'a',move:1600,hold:500},
-    {k:'b0',fx:0,z:2,st:'b',move:1300,hold:150},
-    {k:'b0e',fx:0,z:2,st:'b',move:1600,hold:300},
-    {k:'b1',fx:0,z:2,st:'b',move:800,hold:100},
-    {k:'b1e',fx:0,z:2,st:'b',move:1500,hold:300},
-    {k:'b2',fx:0,z:2,st:'b',move:700,hold:100},
-    {k:'b2e',fx:0,z:2,st:'b',move:1700,hold:900}
+    {k:'a1',fx:0,z:2.3,st:'a',move:1800,hold:500},
+    {k:'a1e',fx:0,z:2.3,st:'a',move:3600,hold:900},
+    {k:'a2',fx:0,z:2.3,st:'a',move:1700,hold:400},
+    {k:'a2e',fx:0,z:2.3,st:'a',move:3800,hold:900},
+    {k:'a3',fx:0,z:2.3,st:'a',move:1500,hold:400},
+    {k:'a3e',fx:0,z:2.3,st:'a',move:4200,hold:1400},
+    {k:'b0',fx:0,z:2.3,st:'b',move:2400,hold:500},
+    {k:'b0e',fx:0,z:2.3,st:'b',move:3600,hold:900},
+    {k:'b1',fx:0,z:2.3,st:'b',move:1700,hold:400},
+    {k:'b1e',fx:0,z:2.3,st:'b',move:3600,hold:900},
+    {k:'b2',fx:0,z:2.3,st:'b',move:1500,hold:400},
+    {k:'b2e',fx:0,z:2.3,st:'b',move:4000,hold:1800}
   ];
   var narrow=window.matchMedia?matchMedia('(max-width:940px)'):{matches:false};
   function next(i){do{i=(i+1)%seq.length}while(narrow.matches&&seq[i].k==='ph');return i}
