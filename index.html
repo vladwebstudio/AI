@@ -103,7 +103,7 @@ html[data-lang=ru] .hero h1{font-size:clamp(36px,min(4.5vw,8.6vh),74px)}
 @keyframes stIn{from{opacity:0;transform:translateY(5px)}}
 /* call timeline */
 .tl{grid-column:1/-1;position:relative;height:38px;margin-top:8px;border-bottom:1px solid var(--line)}
-.tl::before{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/calc(100%/22) 100%}
+.tl::before{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/calc(100%/34) 100%}
 .tl span{position:absolute;bottom:11px;font:400 11px var(--f-mono);color:var(--muted);transform:translateX(-1px)}
 .tl .pin{bottom:0;top:auto;height:24px;width:1.5px;background:var(--accent);transform:none;transition:height .35s cubic-bezier(.2,.8,.2,1)}
 .tl .pin::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);font:500 11px var(--f-mono);color:var(--accent-text);padding-bottom:2px;white-space:nowrap}
@@ -389,20 +389,19 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     </div>
     <div class="stage" id="stage">
       <div class="rig" id="rig">
-        <div class="sheet sheet-front"><img src="img/hero-weak.webp" srcset="img/hero-weak-900.webp 900w, img/hero-weak.webp 1543w" sizes="(max-width:940px) 100vw, 1100px" fetchpriority="high" decoding="async" width="1543" height="1084" data-uk="Картка розмови: слабкі місця з цитатами й таймкодами" alt="">
-          <i class="hp" data-hp="a1" style="left:23%;top:33.4%"></i><i class="hp" data-hp="a2" style="left:15%;top:51.9%"></i><i class="hp" data-hp="a3" style="left:54%;top:51.9%"></i>
-          <i class="hp" data-hp="b1" style="left:15%;top:88.2%"></i><i class="hp" data-hp="b2" style="left:47%;top:88.2%"></i>
+        <div class="sheet sheet-front"><img src="img/hero-weak.webp" srcset="img/hero-weak-900.webp 900w, img/hero-weak.webp 1543w" sizes="(max-width:940px) 100vw, 1100px" fetchpriority="high" decoding="async" width="1543" height="1084" data-uk="Слабкі місця розмови: цитата, таймкод і що сказати замість" alt="">
+          <i class="hp" data-hp="a1" style="left:3.1%;top:17.2%"></i><i class="hp" data-hp="a1e" style="left:49.2%;top:17.2%"></i><i class="hp" data-hp="a2" style="left:4.6%;top:34.8%"></i><i class="hp" data-hp="a2e" style="left:45%;top:34.8%"></i><i class="hp" data-hp="a3" style="left:51.1%;top:34.6%"></i><i class="hp" data-hp="a3e" style="left:91.6%;top:34.6%"></i><i class="hp" data-hp="b0" style="left:3.1%;top:49.8%"></i><i class="hp" data-hp="b0e" style="left:42.1%;top:49.8%"></i><i class="hp" data-hp="b1" style="left:4.6%;top:62.7%"></i><i class="hp" data-hp="b1e" style="left:43.9%;top:62.7%"></i><i class="hp" data-hp="b2" style="left:51.1%;top:64.1%"></i><i class="hp" data-hp="b2e" style="left:92.7%;top:64.1%"></i>
         </div>
       </div>
       <p class="status" aria-live="off">
-        <span class="st-0"><span lang="uk">Реальна картка розмови із системи.</span> <span class="hov"><span lang="uk">Наведіть курсор — лупа ваша.</span></span></span>
-        <span class="st-a"><b class="tc">19:52</b><span lang="uk">Клієнтка чекала меншої ціни — заперечення залишилось без уточнення.</span></span>
-        <span class="st-b"><b class="tc">21:02</b><span lang="uk">Домовленість — «скину сайт, а ви самі напишете». Наступний крок без дати.</span></span>
+        <span class="st-0"><span lang="uk">Приклад розбору на змодельованій розмові.</span> <span class="hov"><span lang="uk">Наведіть курсор — лупа ваша.</span></span></span>
+        <span class="st-a"><b class="tc">19:52</b><span lang="uk">Заперечення про ціну — менеджер одразу знизив ціну, не уточнивши.</span></span>
+        <span class="st-b"><b class="tc">31:40</b><span lang="uk">Розмова закінчилась на «напишу, коли вирішу». Наступний крок без дати.</span></span>
       </p>
     </div>
     <div class="tl" aria-hidden="true">
-      <span style="left:0">00:00</span><span style="left:22.727%">05:00</span><span style="left:45.455%">10:00</span><span style="left:68.182%">15:00</span>
-      <span class="pin pin-a" data-t="19:52" style="left:90.3%"></span><span class="pin pin-b" data-t="21:02" style="left:95.6%"></span>
+      <span style="left:0">00:00</span><span style="left:14.706%">05:00</span><span style="left:29.412%">10:00</span><span style="left:44.118%">15:00</span>
+      <span class="pin pin-a" data-t="19:52" style="left:58.4%"></span><span class="pin pin-b" data-t="31:40" style="left:93.1%"></span>
     </div>
   </div>
   <div class="mag" id="mag" aria-hidden="true"><div class="mag-view"><div class="mag-clone" id="magClone"></div></div><span class="mag-handle"></span><span class="mag-ring"></span></div>
@@ -421,7 +420,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <section class="sec" id="call"><div class="wrap">
   <div class="sec-head" data-rv><h2><span lang="uk">Одна розмова — п'ять відповідей</span></h2>
-    <p class="sec-intro"><span lang="uk">Це реальна картка із системи. Ліворуч — розбір, праворуч — запис розмови й ШІ-чат, якому можна поставити будь-яке питання про неї.</span></p></div>
+    <p class="sec-intro"><span lang="uk">Так виглядає картка розмови (приклад на змодельованих даних). Ліворуч — розбір, праворуч — запис розмови й ШІ-чат, якому можна поставити будь-яке питання про неї.</span></p></div>
   <div data-rv>
     <div class="vt" role="tablist" id="vt">
       <button role="tab" aria-selected="true"><span lang="uk">Підсумок</span></button>
@@ -432,11 +431,11 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <i class="ind" id="ind"></i>
     </div>
     <div class="vqa-box" id="vqa">
-      <div class="vqa on"><h3><span lang="uk">Як пройшла розмова і хто винен, що клієнт не купив?</span></h3><p><span lang="uk">Загальна оцінка, шість критеріїв з вагами і короткий зміст. Окремий висновок: провал менеджера чи нецільовий клієнт. Тут — 79%, клієнтка зараз нецільова, менеджер не винен.</span></p></div>
-      <div class="vqa"><h3><span lang="uk">Де саме менеджер недотиснув?</span></h3><p><span lang="uk">Кожна помилка з поясненням, порадою і дослівною цитатою. Тут дві: заперечення про ціну залишилось без уточнення (<span class="tc">19:52</span>) і наступний крок без конкретного часу (<span class="tc">21:02</span>).</span></p></div>
+      <div class="vqa on"><h3><span lang="uk">Як пройшла розмова і хто винен, що клієнт не купив?</span></h3><p><span lang="uk">Загальна оцінка, шість критеріїв з вагами і короткий зміст. Окремий висновок: провал менеджера чи нецільовий клієнт. Тут — 62%: клієнтка цільова, угоду втрачено через два моменти розмови.</span></p></div>
+      <div class="vqa"><h3><span lang="uk">Де саме менеджер недотиснув?</span></h3><p><span lang="uk">Кожна помилка з поясненням, порадою і дослівною цитатою. Тут дві: заперечення про ціну без уточнення (<span class="tc">19:52</span>) і наступний крок без конкретного часу (<span class="tc">31:40</span>). До кожної — готова фраза, що сказати замість.</span></p></div>
       <div class="vqa"><h3><span lang="uk">Що зі скрипта виконано, а що пропущено?</span></h3><p><span lang="uk">Оцінка за кожним критерієм вашого скрипта з його вагою. Клік по критерію показує, чому оцінка саме така.</span></p></div>
       <div class="vqa"><h3><span lang="uk">Що болить клієнту і чи готовий він купити?</span></h3><p><span lang="uk">Профіль клієнта, готовність до покупки і болі — кожна з цитатою й таймкодом. Готова основа для наступного дзвінка.</span></p></div>
-      <div class="vqa"><h3><span lang="uk">Що було сказано дослівно?</span></h3><p><span lang="uk">Повна розшифровка з таймкодами. На скріні той самий момент із ціною — <span class="tc">19:52</span>. Текст можна скопіювати або завантажити.</span></p></div>
+      <div class="vqa"><h3><span lang="uk">Що було сказано дослівно?</span></h3><p><span lang="uk">Повна розшифровка з таймкодами. У прикладі — момент із ціною — <span class="tc">19:52</span>. Текст можна скопіювати або завантажити.</span></p></div>
     </div>
     <div class="shot card-shot" id="shots">
       <img class="on" src="img/card-summary.webp" srcset="img/card-summary-1280.webp 1280w, img/card-summary.webp 2144w" sizes="(max-width:940px) 1300px, 1124px" loading="lazy" decoding="async" width="2144" height="935" data-uk="Картка розмови, вкладка «Підсумок»: оцінки за критеріями, запис і ШІ-чат" alt="">
@@ -463,7 +462,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   </div>
   <div data-rv>
     <div class="shot chat-shot"><img src="img/ai-chat.webp" srcset="img/ai-chat-720.webp 720w, img/ai-chat.webp 1112w" sizes="(max-width:940px) 92vw, 560px" width="1112" height="1004" loading="lazy" decoding="async" data-uk="ШІ-чат: питання українською і відповідь з цитатами та таймкодами" alt=""></div>
-    <p class="chat-note"><span lang="uk">Приклад із системи: питання й відповідь ШІ по одній із розмов.</span></p>
+    <p class="chat-note"><span lang="uk">Приклад: питання й відповідь ШІ по змодельованій розмові.</span></p>
   </div>
 </div></section>
 
@@ -645,11 +644,18 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   var seq=[
     {k:'ph',fx:.14,z:1.42,st:'0',move:1000,hold:250},
     {k:'ph',fx:.86,z:1.42,st:'0',move:1900,hold:400},
-    {k:'a1',fx:0,z:2,st:'a',move:1300,hold:900},
-    {k:'a2',fx:0,z:2,st:'a',move:700,hold:150},
-    {k:'a3',fx:0,z:2,st:'a',move:2100,hold:600},
-    {k:'b1',fx:0,z:2,st:'b',move:1200,hold:200},
-    {k:'b2',fx:0,z:2,st:'b',move:1900,hold:900}
+    {k:'a1',fx:0,z:2,st:'a',move:1100,hold:150},
+    {k:'a1e',fx:0,z:2,st:'a',move:1700,hold:300},
+    {k:'a2',fx:0,z:2,st:'a',move:900,hold:100},
+    {k:'a2e',fx:0,z:2,st:'a',move:1500,hold:300},
+    {k:'a3',fx:0,z:2,st:'a',move:700,hold:100},
+    {k:'a3e',fx:0,z:2,st:'a',move:1600,hold:500},
+    {k:'b0',fx:0,z:2,st:'b',move:1300,hold:150},
+    {k:'b0e',fx:0,z:2,st:'b',move:1600,hold:300},
+    {k:'b1',fx:0,z:2,st:'b',move:800,hold:100},
+    {k:'b1e',fx:0,z:2,st:'b',move:1500,hold:300},
+    {k:'b2',fx:0,z:2,st:'b',move:700,hold:100},
+    {k:'b2e',fx:0,z:2,st:'b',move:1700,hold:900}
   ];
   var narrow=window.matchMedia?matchMedia('(max-width:940px)'):{matches:false};
   function next(i){do{i=(i+1)%seq.length}while(narrow.matches&&seq[i].k==='ph');return i}
@@ -663,7 +669,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
     clone.style.transform='translate('+(R-(cur.x-ox)*cur.z)+'px,'+(R-(cur.y-oy)*cur.z)+'px) scale('+cur.z+')';
   }
   function nearest(hr){var best='0',bd=130;
-    [['a','a1'],['a','a2'],['a','a3'],['b','b1'],['b','b2']].forEach(function(p){var q=pt(hp(p[1]),0,hr),d=Math.hypot(q.x-cur.x,q.y-cur.y);if(d<bd){bd=d;best=p[0]}});
+    [['a','a1'],['a','a1e'],['a','a2'],['a','a2e'],['a','a3'],['a','a3e'],['b','b0'],['b','b0e'],['b','b1'],['b','b1e'],['b','b2'],['b','b2e']].forEach(function(p){var q=pt(hp(p[1]),0,hr),d=Math.hypot(q.x-cur.x,q.y-cur.y);if(d<bd){bd=d;best=p[0]}});
     return best}
   function frame(now){
     if(!running)return;
@@ -686,7 +692,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
   }
   function run(){if(running||!started||!visible||document.hidden)return;running=true;requestAnimationFrame(function(n){last=n;from={x:cur.x,y:cur.y,z:cur.z};t0=n;frame(n)})}
   function stop(){running=false}
-  function place(){var hr=hero.getBoundingClientRect(),a=pt(hp('a2'),0,hr),b=pt(hp('a3'),0,hr);cur.x=(a.x+b.x)/2;cur.y=a.y;cur.z=2;hero.dataset.st='a';draw(hr)}
+  function place(){var hr=hero.getBoundingClientRect(),a=pt(hp('a1'),0,hr),b=pt(hp('a1e'),0,hr);cur.x=(a.x+b.x)/2;cur.y=a.y;cur.z=2;hero.dataset.st='a';draw(hr)}
   function start(){
     build();if(narrow.matches)idx=2;var hr=hero.getBoundingClientRect(),f=target(seq[idx],hr);
     cur.x=from.x=f.x;cur.y=from.y=f.y-10;started=true;mag.classList.add('on');
